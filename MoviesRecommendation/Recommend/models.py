@@ -3,13 +3,24 @@ from django.db import models
 # Create your models here.
 from mongoengine import Document, EmbeddedDocument, fields
 
-class Titles(Document):
-    tconst = fields.StringField(required=True)
-    titleType = fields.StringField(required=True)
-    primaryTitle = fields.StringField(required=True)
-    originalTitle = fields.StringField(required=True)
-    isAdult = fields.StringField(required=True)
-    startYear = fields.StringField(required=True)
-    endYear = fields.StringField(required=False)
-    runtimeMinutes = fields.StringField(required=False)
+class Movies(Document):
+    movieId = fields.IntField(required=True)
+    title = fields.StringField(required=True)
     genres = fields.StringField(required=True)
+
+class Ratings(Document):
+    userId = fields.IntField(required=True)
+    movieId = fields.IntField(required=True)
+    rating = fields.IntField(required=True)
+    timestamp = fields.IntField(required=True)
+
+class Links(Document):
+    movieId = fields.IntField(required=True)
+    imdbId = fields.IntField(required=True)
+    tmdbId = fields.IntField(required=True)
+
+class Tags(Document):
+    userId = fields.IntField(required=True)
+    movieId = fields.IntField(required=True)
+    tag = fields.StringField(required=True)
+    timestamp = fields.IntField(required=True)

@@ -16,10 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from rest_framework_mongoengine import routers as merouters
 
-from MoviesRecommendation.Recommend.views import TitlesViewSet
+from MoviesRecommendation.Recommend.views import MoviesViewSet,RatingsViewSet,LinksViewSet,TagsViewSet
 
 merouter = merouters.DefaultRouter()
-merouter.register(r'titles', TitlesViewSet)
+merouter.register(r'Movies', MoviesViewSet)
+merouter.register(r'Ratings', RatingsViewSet)
+merouter.register(r'Links', LinksViewSet)
+merouter.register(r'Tags', TagsViewSet)
  
 urlpatterns = [
  

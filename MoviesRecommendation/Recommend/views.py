@@ -2,10 +2,26 @@
 from django.shortcuts import render
 from rest_framework_mongoengine import viewsets as meviewsets
 
-from MoviesRecommendation.Recommend.models import Titles
-from MoviesRecommendation.Recommend.serializers import TitlesSerializer
+from MoviesRecommendation.Recommend.models import Movies, Ratings, Links, Tags
+from MoviesRecommendation.Recommend.serializers import MoviesSerializer, RatingsSerializer, LinksSerializer, TagsSerializer
 
-class TitlesViewSet(meviewsets.ModelViewSet):
-    lookup_field = 'tconst'
-    queryset = Titles.objects.all()
-    serializer_class = TitlesSerializer
+
+class MoviesViewSet(meviewsets.ModelViewSet):
+    lookup_field = 'id'
+    queryset = Movies.objects.all()
+    serializer_class = MoviesSerializer
+
+class RatingsViewSet(meviewsets.ModelViewSet):
+    lookup_field = 'id'
+    queryset = Ratings.objects.all()
+    serializer_class = RatingsSerializer
+
+class LinksViewSet(meviewsets.ModelViewSet):
+    lookup_field = 'id'
+    queryset = Links.objects.all()
+    serializer_class = LinksSerializer
+
+class TagsViewSet(meviewsets.ModelViewSet):
+    lookup_field = 'id'
+    queryset = Tags.objects.all()
+    serializer_class = TagsSerializer

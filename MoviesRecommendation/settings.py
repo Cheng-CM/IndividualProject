@@ -85,7 +85,7 @@ DATABASES = {
 }
 
 mongoengine.connect(
-    db="movies",
+    db="movielens",
     host="localhost"
 )
 
