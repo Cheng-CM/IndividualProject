@@ -2,8 +2,8 @@
 from django.shortcuts import render
 from rest_framework_mongoengine import viewsets as meviewsets
 
-from MoviesRecommendation.Recommend.models import Movies, Ratings, Links, Tags
-from MoviesRecommendation.Recommend.serializers import MoviesSerializer, RatingsSerializer, LinksSerializer, TagsSerializer
+from backend.Recommend.models import Movies, Ratings, Links, Tags
+from backend.Recommend.serializers import MoviesSerializer, RatingsSerializer, LinksSerializer, TagsSerializer
 
 
 class MoviesViewSet(meviewsets.ModelViewSet):

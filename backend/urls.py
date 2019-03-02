@@ -1,4 +1,4 @@
-"""MoviesRecommendation URL Configuration
+"""backend URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.1/topics/http/urls/
@@ -19,5 +19,5 @@ from django.urls import path
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^api/', include('MoviesRecommendation.Recommend.urls')),
+    url(r'^api/', include('backend.Recommend.urls')),
 ]

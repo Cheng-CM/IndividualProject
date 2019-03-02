@@ -1,5 +1,5 @@
 from rest_framework_mongoengine import serializers
-from MoviesRecommendation.Recommend.models import Movies, Ratings, Links, Tags
+from backend.Recommend.models import Movies, Ratings, Links, Tags
 
 
 class MoviesSerializer(serializers.DocumentSerializer):
