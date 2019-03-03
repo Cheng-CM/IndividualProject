@@ -9,7 +9,10 @@
 import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: 'app',
+  name: "Movie",
+  metaInfo: {
+    title: "Movie Item Page"
+  },
   components: {
     HelloWorld
   }

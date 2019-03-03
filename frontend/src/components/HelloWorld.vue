@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
+    <h1>{{ this.$route.params.id }}</h1>
     <h3>Movie Info</h3>
     <ul>
       <li>{{ info.data.title }}</li>
@@ -11,10 +11,12 @@
 </template>
 
 <script>
-import axios from "axios";
-import MovieAPI from "@/api/movie"
+import MovieAPI from "@/api/movie.js";
 export default {
   name: "HelloWorld",
+  metaInfo: {
+    title: "Item Page"
+  },
   props: {
     msg: String
   },
@@ -32,9 +34,9 @@ export default {
   },
   methods: {
     async loadinfo() {
-      await axios
-        .get("http://localhost:8000/api/Movies/" + this.$route.params.id)
-        .then(response => (this.info = response));
+      const res = await MovieAPI.getMovie(this.$route.params.id);
+      // console.log(res.data);
+      this.info.data = res.data
     }
   },
   mounted() {
