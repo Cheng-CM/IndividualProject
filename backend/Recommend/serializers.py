@@ -1,5 +1,5 @@
 from rest_framework_mongoengine import serializers
-from backend.Recommend.models import Movies, Ratings, Links, Tags
+from backend.Recommend.models import Movies, Ratings, Links, Tags, custom_ratings
 
 
 class MoviesSerializer(serializers.DocumentSerializer):
@@ -13,10 +13,18 @@ class RatingsSerializer(serializers.DocumentSerializer):
         model = Ratings
         fields = '__all__'
 
+
+class cRatingsSerializer(serializers.DocumentSerializer):
+    class Meta:
+        model = custom_ratings
+        fields = '__all__'
+
+
 class LinksSerializer(serializers.DocumentSerializer):
     class Meta:
         model = Links
         fields = '__all__'
+
 
 class TagsSerializer(serializers.DocumentSerializer):
     class Meta:
