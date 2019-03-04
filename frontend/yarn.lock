@@ -3217,7 +3217,7 @@ extend-shallow@^3.0.0, extend-shallow@^3.0.2:
     assign-symbols "^1.0.0"
     is-extendable "^1.0.1"
 
-extend@~3.0.2:
+extend@3.0.2, extend@~3.0.2:
   version "3.0.2"
   resolved "http://registry.npm.taobao.org/extend/download/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
   integrity sha1-+LETa0Bx+9jrFAr/hYsQGewpFfo=
@@ -6577,6 +6577,11 @@ schema-utils@^1.0.0:
     ajv-errors "^1.0.0"
     ajv-keywords "^3.1.0"
 
+scope-eval@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/scope-eval/-/scope-eval-1.0.0.tgz#e182db1a1ef26f3e79d4bf48423b25e22839f0ff"
+  integrity sha1-4YLbGh7ybz551L9IQjsl4ig58P8=
+
 select-hose@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/select-hose/download/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
@@ -7608,6 +7613,14 @@ vue-eslint-parser@^5.0.0:
     espree "^4.1.0"
     esquery "^1.0.1"
     lodash "^4.17.11"
+
+vue-form@^4.10.1:
+  version "4.10.1"
+  resolved "https://registry.yarnpkg.com/vue-form/-/vue-form-4.10.1.tgz#062a9655d7004361f3122341509e3105f8a7f0e8"
+  integrity sha512-/dMvwuSp5Ht7qS5MWKV3NCH5Dy8KBU1m/9th0zBRYByRo6AKHvrheEBFfB1ibamP6eSHdErYI3fIruAY+obw+w==
+  dependencies:
+    extend "3.0.2"
+    scope-eval "1.0.0"
 
 vue-functional-data-merge@^2.0.7:
   version "2.0.7"

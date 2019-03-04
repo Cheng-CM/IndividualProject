@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import MovieMain from '@/components/MovieMain'
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -9,7 +9,7 @@ export default new VueRouter({
     {
         name: "movie",
         path: '/movie/:id',
-        component: HelloWorld
+        component: MovieMain
     }
   ]
 })

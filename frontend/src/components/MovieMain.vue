@@ -12,12 +12,9 @@
 <script>
 import MovieAPI from "@/api/movie.js";
 export default {
-  name: "HelloWorld",
+  name: "MovieMain",
   metaInfo: {
     title: "Item Page"
-  },
-  props: {
-    msg: String
   },
   data() {
     return {

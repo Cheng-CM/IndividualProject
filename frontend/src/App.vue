@@ -1,20 +1,22 @@
 <template>
   <div id="app">
-    <HelloWorld/>
+    <!-- <MovieMain/> -->
+    <UserPost/>
   </div>
 </template>
 
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
-
+// import MovieMain from "./components/MovieMain.vue";
+import UserPost from "./components/UserPost.vue";
 export default {
   name: "Movie",
   metaInfo: {
     title: "Movie Item Page"
   },
   components: {
-    HelloWorld
+    // MovieMain,
+    UserPost
   }
 };
 </script>
