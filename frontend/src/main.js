@@ -5,6 +5,9 @@ import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+import BootstrapVue from 'bootstrap-vue'
+
+Vue.use(BootstrapVue)
 
 Vue.use(VueAxios, axios)
 

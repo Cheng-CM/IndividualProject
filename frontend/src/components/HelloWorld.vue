@@ -1,6 +1,5 @@
 <template>
   <div class="hello">
-    <h1>{{ this.$route.params.id }}</h1>
     <h3>Movie Info</h3>
     <ul>
       <li>{{ info.data.title }}</li>
