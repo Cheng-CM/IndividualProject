@@ -23,25 +23,23 @@ export default {
   data() {
     return {
       ratingform: {
-        userId: 999,
-        movieId: "",
-        rating: ""
+        userId: 999
       }
     };
   },
   methods: {
     async rate() {
       const params = {
-        username: this.ratingform.userId,
-        email: this.ratingform.movieId,
-        password: this.ratingform.rating
+        userId: this.ratingform.userId,
+        movieId: this.ratingform.movieId,
+        rating: this.ratingform.rating,
+        timestamp: new Date().getTime()
       };
-      const res = await MovieAPI.postRate(params);
       console.log(params);
+      const res = await MovieAPI.postRate(params);
     }
   },
-  mounted() {
-  }
+  mounted() {}
 };
 </script>
 

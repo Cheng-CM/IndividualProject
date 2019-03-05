@@ -15,10 +15,10 @@ class Ratings(Document):
     timestamp = fields.IntField(required=True)
 
 class custom_ratings(Document):
-    userId = fields.IntField(required=False)
-    movieId = fields.IntField(required=False)
-    rating = fields.IntField(required=False)
-    timestamp = fields.IntField(required=False)
+    userId = fields.IntField(required=True)
+    movieId = fields.IntField(required=True)
+    rating = fields.IntField(required=True)
+    timestamp = fields.IntField(required=True)
 
 class Links(Document):
     movieId = fields.IntField(required=True)
