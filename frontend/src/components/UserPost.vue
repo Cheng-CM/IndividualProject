@@ -1,15 +1,17 @@
 <template>
   <div class="hello">
     <h3>User rating form</h3>
+    <div class="container">
     <form class="my-5">
       <b-form-group label="Movie ID">
         <b-input v-model="ratingform.movieId"/>
       </b-form-group>
       <b-form-group label="Rating">
-        <b-input v-model="ratingform.rating"/>
+        <b-input type=number v-model="ratingform.rating"/>
       </b-form-group>
       <b-btn variant="primary" @click="rate()">Rate</b-btn>
     </form>
+    </div>
   </div>
 </template>
 
