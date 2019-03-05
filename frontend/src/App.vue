@@ -1,22 +1,17 @@
 <template>
   <div id="app">
-    <!-- <MovieMain/> -->
-    <UserPost/>
+    <router-view/>
   </div>
 </template>
 
 
 <script>
-// import MovieMain from "./components/MovieMain.vue";
-import UserPost from "./components/UserPost.vue";
 export default {
   name: "Movie",
   metaInfo: {
     title: "Movie Item Page"
   },
   components: {
-    // MovieMain,
-    UserPost
   }
 };
 </script>
