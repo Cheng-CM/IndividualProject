@@ -22,6 +22,7 @@ from backend.Recommend.views import (LinksViewSet, MoviesViewSet,
 
 merouter = merouters.DefaultRouter()
 merouter.register(r'Movies', MoviesViewSet)
+# merouter.register(r'RandomMovie', RandomMoviesViewSet)
 merouter.register(r'Ratings', RatingsViewSet)
 merouter.register(r'custom_ratings', cRatingsViewSet)
 merouter.register(r'Links', LinksViewSet)
