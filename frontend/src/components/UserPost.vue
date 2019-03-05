@@ -35,8 +35,7 @@ export default {
         rating: this.ratingform.rating,
         timestamp: new Date().getTime()
       };
-      console.log(params);
-      const res = await MovieAPI.postRate(params);
+      await MovieAPI.postRate(params);
     }
   },
   mounted() {}
