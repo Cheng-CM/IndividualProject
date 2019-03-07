@@ -18,15 +18,15 @@ from rest_framework_mongoengine import routers as merouters
 
 from backend.Recommend.views import (LinksViewSet, MoviesViewSet,
                                      RatingsViewSet, TagsViewSet,
-                                     cRatingsViewSet)
+                                     cRatingsViewSet, rMoviesViewSet)
 
 merouter = merouters.DefaultRouter()
-merouter.register(r'Movies', MoviesViewSet)
-# merouter.register(r'RandomMovie', RandomMoviesViewSet)
+merouter.register(r'rMovie', rMoviesViewSet)
 merouter.register(r'Ratings', RatingsViewSet)
 merouter.register(r'custom_ratings', cRatingsViewSet)
 merouter.register(r'Links', LinksViewSet)
 merouter.register(r'Tags', TagsViewSet)
+merouter.register(r'Movies', MoviesViewSet)
 
 urlpatterns = [
 

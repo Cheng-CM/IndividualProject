@@ -1,6 +1,8 @@
 <template>
   <div id="app">
     <router-view/>
+      <b-button class="mb-4" :to="'/rating/'">Rating</b-button>
+        <b-button class="mb-4" :to="'/movie/'+'5c7be1ae04f84fef47872c6a'">Movie</b-button>
   </div>
 </template>
 

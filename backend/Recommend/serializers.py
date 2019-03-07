@@ -1,8 +1,18 @@
+from random import randint
+
 from rest_framework_mongoengine import serializers
-from backend.Recommend.models import Movies, Ratings, Links, Tags, custom_ratings
+
+from backend.Recommend.models import (Links, Movies, Ratings, Tags,
+                                      custom_ratings)
 
 
 class MoviesSerializer(serializers.DocumentSerializer):
+    class Meta:
+        model = Movies
+        fields = '__all__'
+
+
+class rMoviesSerializer(serializers.DocumentSerializer):
     class Meta:
         model = Movies
         fields = '__all__'

@@ -1,24 +1,31 @@
 # Create your views here.
+from random import randint
+
 from django.shortcuts import render
 from rest_framework_mongoengine import viewsets as meviewsets
-from django.db.models.aggregates import Count
-from random import randint
-from backend.Recommend.models import Movies, Ratings, Links, Tags, custom_ratings
-from backend.Recommend.serializers import MoviesSerializer, RatingsSerializer, LinksSerializer, TagsSerializer, cRatingsSerializer
+
+from backend.Recommend.models import (Links, Movies, Ratings, Tags,
+                                      custom_ratings)
+from backend.Recommend.serializers import (LinksSerializer, MoviesSerializer,
+                                           RatingsSerializer, TagsSerializer,
+                                           cRatingsSerializer,
+                                           rMoviesSerializer)
+
+
+class rMoviesViewSet(meviewsets.ModelViewSet):
+    def update():
+        count = Movies.objects.count()
+        rint = randint(1, count)
+        return rint
+    # queryset = Movies.objects(movieId = update())
+    queryset = Movies.objects[0:20]
+    serializer_class = MoviesSerializer
 
 
 class MoviesViewSet(meviewsets.ModelViewSet):
     lookup_field = 'id'
     queryset = Movies.objects.all()
     serializer_class = MoviesSerializer
-
-
-# class RandomMoviesViewSet(meviewsets.ModelViewSet):
-#     count = Movies.objects.all()
-#     random_index = randint(0, count - 1)
-#     lookup_field = 'id'
-#     queryset = Movies.objects.all()
-#     serializer_class = MoviesSerializer
 
 
 class RatingsViewSet(meviewsets.ModelViewSet):
