@@ -7,12 +7,12 @@ Vue.use(VueRouter)
 export default new VueRouter({
   mode: 'history',
   routes: [{
-      name: "movie",
-      path: '/movie/:id',
+      name: "Comparsion",
+      path: '/cRating',
       component: MovieMain
     }, {
       name: "5starRate",
-      path: '/rating',
+      path: '/rRating',
       component: UserPost
     },
 

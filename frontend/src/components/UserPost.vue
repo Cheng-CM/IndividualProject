@@ -1,16 +1,21 @@
 <template>
   <div class="hello">
-    <h3>User rating form</h3>
     <div class="container">
-    <form class="my-5">
-      <b-form-group label="Movie ID">
-        <b-input v-model="ratingform.movieId"/>
-      </b-form-group>
-      <b-form-group label="Rating">
-        <b-input type=number v-model="ratingform.rating"/>
-      </b-form-group>
-      <b-btn variant="primary" @click="rate()">Rate</b-btn>
-    </form>
+      <form class="my-5">
+        <h3>Movie Info</h3>
+        <ul>
+          <li>{{ info.data.title }}</li>
+          <li>{{ info.data.genres }}</li>
+          <li><b-btn variant="primary" @click="rate()">Choose</b-btn></li>
+        </ul>
+        
+        or
+        <ul>
+          <li>{{ info.data2.title }}</li>
+          <li>{{ info.data2.genres }}</li>
+          <li><b-btn variant="primary" @click="rate()">Choose</b-btn></li>
+        </ul>
+      </form>
     </div>
   </div>
 </template>
@@ -26,6 +31,18 @@ export default {
     return {
       ratingform: {
         userId: 999
+      },
+      info: {
+        data: {
+          id: "",
+          movieId: "",
+          title: "",
+          genres: ""
+        },data2: {
+          id: "",
+          title: "",
+          genres: ""
+        }
       }
     };
   },
@@ -33,14 +50,23 @@ export default {
     async rate() {
       const params = {
         userId: this.ratingform.userId,
-        movieId: this.ratingform.movieId,
+        movieId: this.info.data.movieId,
         rating: this.ratingform.rating,
         timestamp: new Date().getTime()
       };
       await MovieAPI.postRate(params);
+    },
+    async loadinfo() {
+      const res = await MovieAPI.getRandomMovie();
+       const res2 = await MovieAPI.getRandomMovie();
+      console.log(res.data[0]);
+      this.info.data = res.data[0];
+            this.info.data2 = res2.data[0];
     }
   },
-  mounted() {}
+  mounted() {
+    this.loadinfo();
+  }
 };
 </script>
 

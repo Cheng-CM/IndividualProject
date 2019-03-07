@@ -12,18 +12,21 @@ from backend.Recommend.serializers import (LinksSerializer, MoviesSerializer,
                                            rMoviesSerializer)
 
 
+def getRandomId():
+    count = Movies.objects.count()
+    rint = randint(1, count + 1)
+    return rint
+
+
 class rMoviesViewSet(meviewsets.ModelViewSet):
-    def update():
-        count = Movies.objects.count()
-        rint = randint(1, count)
-        return rint
-    # queryset = Movies.objects(movieId = update())
-    queryset = Movies.objects[0:20]
+    def get_queryset(self):
+        return Movies.objects.all().filter(movieId = getRandomId())
+    queryset = get_queryset(Movies)
     serializer_class = MoviesSerializer
 
 
 class MoviesViewSet(meviewsets.ModelViewSet):
-    lookup_field = 'id'
+    lookup_field = 'movieId'
     queryset = Movies.objects.all()
     serializer_class = MoviesSerializer
 

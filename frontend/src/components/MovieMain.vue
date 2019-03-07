@@ -1,11 +1,19 @@
 <template>
   <div class="hello">
-    <h3>Movie Info</h3>
-    <ul>
-      <li>{{ info.data.title }}</li>
-      <li>{{ info.data.genres }}</li>
-      <li>{{ info.data.movieId }}</li>
-    </ul>
+    <div class="container">
+      <form class="my-5">
+        <h3>Movie Info</h3>
+        <ul>
+          <li>{{ info.data.title }}</li>
+          <li>{{ info.data.genres }}</li>
+        </ul>
+
+        <b-form-group label="Rating">
+          <b-input type="number" :min="0" :max="5" v-model="ratingform.rating"/>
+        </b-form-group>
+        <b-btn variant="primary" @click="rate()">Rate</b-btn>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -18,10 +26,12 @@ export default {
   },
   data() {
     return {
+      ratingform: {
+        userId: 999
+      },
       info: {
         data: {
           id: "",
-          movieId: "",
           title: "",
           genres: ""
         }
@@ -29,10 +39,19 @@ export default {
     };
   },
   methods: {
+    async rate() {
+      const params = {
+        userId: this.ratingform.userId,
+        movieId: this.info.data.movieId,
+        rating: this.ratingform.rating,
+        timestamp: new Date().getTime()
+      };
+      await MovieAPI.postRate(params);
+    },
     async loadinfo() {
-      const res = await MovieAPI.getMovie(this.$route.params.id);
-      // console.log(res.data);
-      this.info.data = res.data
+      const res = await MovieAPI.getRandomMovie();
+      console.log(res.data[0]);
+      this.info.data = res.data[0];
     }
   },
   mounted() {
