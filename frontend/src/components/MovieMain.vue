@@ -3,6 +3,9 @@
     <div class="container">
       <form class="my-5">
         <h3>Movie Info</h3>
+        <div class="container-small" >
+        <img src="https://i.pinimg.com/originals/cb/dd/77/cbdd779fc79c158eb30e13a8653c39b8.jpg" style="height: 450px;"/>
+        </div>
         <ul>
           <li>{{ info.data.title }}</li>
           <li>{{ info.data.genres }}</li>
