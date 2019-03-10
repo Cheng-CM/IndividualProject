@@ -13,7 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import include, url
+from django.contrib import admin
+from django.urls import path
 from rest_framework_mongoengine import routers as merouters
 
 from backend.Recommend.views import (LinksViewSet, MoviesViewSet,
@@ -21,12 +23,12 @@ from backend.Recommend.views import (LinksViewSet, MoviesViewSet,
                                      cRatingsViewSet, rMoviesViewSet)
 
 merouter = merouters.DefaultRouter()
-merouter.register(r'rMovie', rMoviesViewSet)
-merouter.register(r'Ratings', RatingsViewSet)
-merouter.register(r'custom_ratings', cRatingsViewSet)
-merouter.register(r'Links', LinksViewSet)
-merouter.register(r'Tags', TagsViewSet)
-merouter.register(r'Movies', MoviesViewSet)
+merouter.register(r'rm', rMoviesViewSet)
+merouter.register(r'r', RatingsViewSet)
+merouter.register(r'cr', cRatingsViewSet)
+merouter.register(r'l', LinksViewSet)
+merouter.register(r't', TagsViewSet)
+merouter.register(r'm', MoviesViewSet)
 
 urlpatterns = [
 
