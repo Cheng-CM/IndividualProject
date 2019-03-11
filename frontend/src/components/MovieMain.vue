@@ -3,18 +3,22 @@
     <div class="container">
       <form class="my-5">
         <h3>Movie Info</h3>
-        <div class="container-small" >
-        <img src="https://i.pinimg.com/originals/cb/dd/77/cbdd779fc79c158eb30e13a8653c39b8.jpg" style="height: 450px;"/>
-        </div>
+        <div class="container-small"></div>
         <ul>
           <li>{{ info.data.title }}</li>
           <li>{{ info.data.genres }}</li>
         </ul>
-
         <b-form-group label="Rating">
           <b-input type="number" :min="0" :max="5" v-model="ratingform.rating"/>
         </b-form-group>
-        <b-btn variant="primary" @click="rate()">Rate</b-btn>
+        <ul>
+          <li>
+            <b-btn variant="primary" @click="rate()">Rate</b-btn>
+          </li>
+          <li>
+            <b-btn variant="primary" @click="loadinfo()">Have not seen it</b-btn>
+          </li>
+        </ul>
       </form>
     </div>
   </div>
@@ -30,7 +34,7 @@ export default {
   data() {
     return {
       ratingform: {
-        userId: 999
+        userId: "Test"
       },
       info: {
         data: {
@@ -53,7 +57,6 @@ export default {
     },
     async loadinfo() {
       const res = await MovieAPI.getRandomMovie();
-      console.log(res.data[0]);
       this.info.data = res.data[0];
     }
   },
