@@ -9,13 +9,6 @@ class MoviesSerializer(serializers.DocumentSerializer):
         model = Movies
         fields = '__all__'
 
-
-class rMoviesSerializer(serializers.DocumentSerializer):
-    class Meta:
-        model = Movies
-        fields = '__all__'
-
-
 class RatingsSerializer(serializers.DocumentSerializer):
     class Meta:
         model = Ratings

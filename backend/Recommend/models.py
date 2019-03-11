@@ -1,4 +1,3 @@
-from django.db import models
 from mongoengine import Document, EmbeddedDocument, fields
 
 # Create your models here.
@@ -8,7 +7,6 @@ class Movies(Document):
     movieId = fields.IntField(required=True)
     title = fields.StringField(required=True)
     genres = fields.StringField(required=True)
-
 
 class Ratings(Document):
     userId = fields.IntField(required=True)

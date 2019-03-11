@@ -8,21 +8,20 @@ from backend.Recommend.models import (Links, Movies, Ratings, Tags,
                                       custom_ratings)
 from backend.Recommend.serializers import (LinksSerializer, MoviesSerializer,
                                            RatingsSerializer, TagsSerializer,
-                                           cRatingsSerializer,
-                                           rMoviesSerializer)
+                                           cRatingsSerializer)
 
+idList = []
+for self in Movies.objects:
+    idList.append(self.id)
 
 def getRandomId():
     count = Movies.objects.count()
-    return randint(0, count)
+    return idList[randint(0, count)]
 
 
 class rMoviesViewSet(meviewsets.ModelViewSet):
     def get_queryset(self):
-        idList = []
-        for self in Movies.objects:
-            idList.append(self.id)
-        return Movies.objects.filter(id= idList[getRandomId()])
+        return Movies.objects.filter(id = getRandomId())
     queryset = get_queryset(Movies)
     serializer_class = MoviesSerializer
 
