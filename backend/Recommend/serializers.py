@@ -1,5 +1,3 @@
-from random import randint
-
 from rest_framework_mongoengine import serializers
 
 from backend.Recommend.models import (Links, Movies, Ratings, Tags,

@@ -14,13 +14,15 @@ from backend.Recommend.serializers import (LinksSerializer, MoviesSerializer,
 
 def getRandomId():
     count = Movies.objects.count()
-    rint = randint(1, count + 1)
-    return rint
+    return randint(0, count)
 
 
 class rMoviesViewSet(meviewsets.ModelViewSet):
     def get_queryset(self):
-        return Movies.objects.all().filter(movieId = getRandomId())
+        idList = []
+        for self in Movies.objects:
+            idList.append(self.id)
+        return Movies.objects.filter(id= idList[getRandomId()])
     queryset = get_queryset(Movies)
     serializer_class = MoviesSerializer
 
