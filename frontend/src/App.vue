@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-    <b-button class="mb-4" :to="'/cRating/'">Scale-Rating</b-button>
-    <!-- <b-button class="mb-4" :to="'/rRating/'">Comparison</b-button> -->
     <router-view/>
   </div>
 </template>
@@ -13,7 +11,10 @@ export default {
   metaInfo: {
     title: "Movie Item Page"
   },
-  components: {}
+  components: {
+  },
+  methods: {
+  }
 };
 </script>
 

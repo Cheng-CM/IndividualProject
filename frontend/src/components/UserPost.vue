@@ -24,7 +24,7 @@
 <script>
 import MovieAPI from "@/api/movie.js";
 export default {
-  name: "MovieMain",
+  name: "scale",
   metaInfo: {
     title: "Item Page"
   },

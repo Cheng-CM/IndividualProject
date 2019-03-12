@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+import StarRating from 'vue-star-rating'
 // app.js
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -10,6 +11,8 @@ import VueAxios from 'vue-axios'
 
 import BootstrapVue from 'bootstrap-vue'
 
+
+Vue.component('star-rating', StarRating);
 Vue.use(VueAxios, axios);
 Vue.use(BootstrapVue);
 
