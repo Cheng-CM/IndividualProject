@@ -11,7 +11,6 @@
             <b-form-group label="Rating:" class="col-sm">
               <star-rating
                 v-model="rating"
-                :increment="0.5"
                 :glow="5"
                 :rounded-corners="true"
                 :star-points="[23,2, 14,17, 0,19, 10,34, 7,50, 23,43, 38,50, 36,34, 46,19, 31,17]"
@@ -43,6 +42,7 @@ export default {
   },
   data() {
     return {
+      rating: 0,
       ratingform: {
         userId: 1
       },
@@ -52,6 +52,7 @@ export default {
           title: "",
           genres: ""
         }
+        
       }
     };
   },
@@ -71,6 +72,10 @@ export default {
     async loadinfo() {
       const res = await MovieAPI.getRandomMovie();
       this.info.data = res.data[0];
+      this.resetStar();
+    },
+    resetStar(){
+      this.rating = 0;
     }
   },
   mounted() {
