@@ -66,8 +66,6 @@ export default {
       this.$session.set("ratecount", ++this.ratecount);
       if (this.$session.get("ratecount") >= 10) {
         this.$router.push("/cRating");
-        console.log("123");
-        
       }
       console.log(this.$session.get("ratecount"));
     },
