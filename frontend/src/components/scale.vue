@@ -43,6 +43,7 @@ export default {
   data() {
     return {
       rating: 0,
+      ratecount: 0,
       info: {
         data: {
           id: "",
@@ -62,18 +63,26 @@ export default {
       };
       await MovieAPI.postRate(params);
       this.loadinfo();
+      this.$session.set("ratecount", ++this.ratecount);
+      if (this.$session.get("ratecount") >= 10) {
+        this.$router.push("/cRating");
+        console.log("123");
+        
+      }
+      console.log(this.$session.get("ratecount"));
     },
     async loadinfo() {
       const res = await MovieAPI.getRandomMovie();
       this.info.data = res.data[0];
       this.resetStar();
     },
-    resetStar(){
+    resetStar() {
       this.rating = 0;
     }
   },
   mounted() {
     this.loadinfo();
+    console.log(this.$session.get("ratecount"));
   }
 };
 </script>

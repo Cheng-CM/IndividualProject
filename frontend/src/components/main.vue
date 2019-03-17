@@ -24,7 +24,6 @@ export default {
   components: {},
   methods: {
     async loadId() {
-      this.$session.start();
       var userId = 1000;
       const res = await MovieAPI.getgtUserid();
       if (res.data[0] === undefined) {
@@ -35,10 +34,13 @@ export default {
         }
         this.$session.set("userId", userId);
       }
+      this.$session.set("ratecount", 0)
     }
   },
   mounted() {
     this.loadId();
+    console.log(this.$session.getAll());
+    
   }
 };
 </script>
