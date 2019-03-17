@@ -10,11 +10,14 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 
 import BootstrapVue from 'bootstrap-vue'
-
+import VueSession from 'vue-session'
+Vue.use(VueSession)
 
 Vue.component('star-rating', StarRating);
 Vue.use(VueAxios, axios);
 Vue.use(BootstrapVue);
+Vue.use(router);
+
 
 Vue.config.productionTip = false
 

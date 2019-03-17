@@ -43,29 +43,23 @@ export default {
   data() {
     return {
       rating: 0,
-      ratingform: {
-        userId: 1
-      },
       info: {
         data: {
           id: "",
           title: "",
           genres: ""
         }
-        
       }
     };
   },
   methods: {
     async rate() {
       const params = {
-        userId: this.ratingform.userId,
+        userId: this.$session.get("userId"),
         movieId: this.info.data.movieId,
         rating: this.rating,
         timestamp: new Date().getTime()
       };
-      console.log(params);
-
       await MovieAPI.postRate(params);
       this.loadinfo();
     },

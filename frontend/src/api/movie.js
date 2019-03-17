@@ -9,5 +9,10 @@ class MovieAPI {
     postRate(params){
         return Vue.prototype.axios.post("http://localhost:8000/api/cr/?", params);
     }
+    getgtUserid(){
+        return Vue.prototype.axios.get("http://localhost:8000/api/gcr/");
+    } 
+    
+    
 }
 export default new MovieAPI();

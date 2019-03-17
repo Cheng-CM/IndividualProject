@@ -8,19 +8,19 @@ Vue.use(VueRouter)
 export default new VueRouter({
   mode: 'history',
   routes: [{
-      name: "Scale",
-      path: '/rRating',
-      component: scale
-    }, {
-      name: "Comparsion",
-      path: '/cRating',
-      component: UserPost
-    },
-    {
-      name: "Main",
-      path: '/main',
-      component: main
-    },
+    name: "Scale",
+    path: '/rRating',
+    component: scale
+  }, {
+    name: "Comparsion",
+    path: '/cRating',
+    component: UserPost
+  },
+  {
+    name: "Main",
+    path: '/main',
+    component: main
+  },
 
   ]
 })

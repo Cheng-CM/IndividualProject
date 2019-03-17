@@ -6,9 +6,7 @@
       </div>
       <div class="row">
         <ul>
-          <router-link to="/rRating">
-            <b-button class="mb-4" variant="primary" :to="'/rRating/'" @click="start()">Start</b-button>
-          </router-link>
+          <b-button class="mb-4" variant="primary" to="rRating">Start</b-button>
         </ul>
       </div>
     </div>
@@ -17,13 +15,31 @@
 
 
 <script>
+import MovieAPI from "@/api/movie.js";
 export default {
-  name: "Movie",
+  name: "Main",
   metaInfo: {
     title: "Movie Item Page"
   },
   components: {},
-  methods: {}
+  methods: {
+    async loadId() {
+      this.$session.start();
+      var userId = 1000;
+      const res = await MovieAPI.getgtUserid();
+      if (res.data[0] === undefined) {
+        this.$session.set("userId", userId);
+      } else {
+        if (res.data[0].userId >= userId) {
+          userId = res.data[0].userId + 1;
+        }
+        this.$session.set("userId", userId);
+      }
+    }
+  },
+  mounted() {
+    this.loadId();
+  }
 };
 </script>
 

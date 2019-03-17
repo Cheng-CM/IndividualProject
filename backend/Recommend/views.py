@@ -14,6 +14,7 @@ idList = []
 for self in Movies.objects:
     idList.append(self.id)
 
+
 def getRandomId():
     count = Movies.objects.count()
     return idList[randint(0, count)]
@@ -21,7 +22,7 @@ def getRandomId():
 
 class rMoviesViewSet(meviewsets.ModelViewSet):
     def get_queryset(self):
-        return Movies.objects.filter(id = getRandomId())
+        return Movies.objects.filter(id=getRandomId())
     queryset = get_queryset(Movies)
     serializer_class = MoviesSerializer
 
@@ -43,6 +44,12 @@ class cRatingsViewSet(meviewsets.ModelViewSet):
     queryset = custom_ratings.objects.all()
     serializer_class = cRatingsSerializer
 
+
+class gcRatingsViewSet(meviewsets.ModelViewSet):
+    def get_queryset(self):
+        return custom_ratings.objects.all().order_by('-userId').limit(1)
+    queryset = get_queryset(custom_ratings)
+    serializer_class = cRatingsSerializer
 
 class LinksViewSet(meviewsets.ModelViewSet):
     lookup_field = 'id'
