@@ -26,21 +26,21 @@ export default {
     async loadId() {
       var userId = 1000;
       const res = await MovieAPI.getgtUserid();
-      if (res.data[0] === undefined) {
-        this.$session.set("userId", userId);
-      } else {
-        if (res.data[0].userId >= userId) {
-          userId = res.data[0].userId + 1;
+      if (!this.$session.has("userId")) {
+        if (res.data[0] === undefined) {
+          this.$session.set("userId", userId);
+        } else {
+          if (res.data[0].userId >= userId) {
+            userId = res.data[0].userId + 1;
+          }
+          this.$session.set("userId", userId);
         }
-        this.$session.set("userId", userId);
+        this.$session.set("ratecount", 0);
       }
-      this.$session.set("ratecount", 0)
     }
   },
   mounted() {
     this.loadId();
-    console.log(this.$session.getAll());
-    
   }
 };
 </script>

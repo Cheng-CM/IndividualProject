@@ -14,6 +14,9 @@ export default {
   components: {
   },
   methods: {
+  },
+  mounted(){
+    this.$router.push("/main")
   }
 };
 </script>
