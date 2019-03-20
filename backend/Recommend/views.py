@@ -46,9 +46,8 @@ class cRatingsViewSet(meviewsets.ModelViewSet):
 
 
 class gcRatingsViewSet(meviewsets.ModelViewSet):
-    lookup_field = 'userId'
     def get_queryset(self):
-        return custom_ratings.objects.all().limit(10)
+        return custom_ratings.objects.all().order_by('-userId').limit(1)
     queryset = get_queryset(custom_ratings)
     serializer_class = cRatingsSerializer
 
