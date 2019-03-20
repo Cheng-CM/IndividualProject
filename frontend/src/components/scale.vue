@@ -27,6 +27,7 @@
           <li>
             <b-btn variant="primary" @click="loadinfo()">Have not seen it</b-btn>
           </li>
+          <li>{{ movies }} / 10</li>
         </ul>
       </form>
     </div>
@@ -43,6 +44,7 @@ export default {
   data() {
     return {
       rating: 0,
+      movies: 0,
       info: {
         data: {
           id: "",
@@ -54,6 +56,8 @@ export default {
   },
   methods: {
     async rate() {
+      console.log(this.$session.getAll());
+      
       if (this.$session.get("ratecount") >= 10) {
         this.$router.push("/cRating");
       } else {
@@ -67,6 +71,13 @@ export default {
 
         this.loadinfo();
 
+        if (this.$session.has("movieIds")) {
+          var mIds = this.$session.get("movieIds");
+          this.$session.set("movieIds", mIds + "," + this.info.data.movieId);
+        } else {
+          this.$session.set("movieIds", this.info.data.movieId);
+        }
+
         var rc = this.$session.get("ratecount");
         this.$session.set("ratecount", ++rc);
 
@@ -79,6 +90,7 @@ export default {
       const res = await MovieAPI.getRandomMovie();
       this.info.data = res.data[0];
       this.resetStar();
+      this.movies = this.$session.get("ratecount");
     },
     resetStar() {
       this.rating = 0;
@@ -86,8 +98,8 @@ export default {
   },
   mounted() {
     if (this.$session.get("ratecount") >= 10) {
-        this.$router.push("/cRating");
-      }
+      this.$router.push("/cRating");
+    }
     this.loadinfo();
   }
 };
