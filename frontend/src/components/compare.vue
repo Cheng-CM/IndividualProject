@@ -10,11 +10,8 @@
         </ul>
 
         <ul>
-          <li v-for="item in movies">
-            {{ item.title }}
-          </li>
+          <li v-for="item in movies">{{ item.title }}</li>
         </ul>
-
       </form>
     </div>
   </div>
@@ -34,7 +31,7 @@ export default {
       data: {
         movies: []
       },
-      movies:[]
+      movies: []
     };
   },
   methods: {

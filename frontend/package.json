@@ -16,7 +16,8 @@
     "vue-form": "^4.10.1",
     "vue-router": "^3.0.2",
     "vue-session": "^1.0.0",
-    "vue-star-rating": "^1.6.1"
+    "vue-star-rating": "^1.6.1",
+    "vuedraggable": "^2.19.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.0",
