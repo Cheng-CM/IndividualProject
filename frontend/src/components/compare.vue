@@ -3,20 +3,18 @@
     <div class="container">
       <form class="my-5">
         <h3>Movie Info</h3>
-        <ul>
-          <li>{{ info.data1.title }}</li>
-          <li>{{ info.data1.genres }}</li>
+        <ul id="movieList">
           <li>
-            <b-btn variant="primary" @click="rate(info.data1.movieId)">Rate</b-btn>
-          </li>
-        </ul>or
-        <ul>
-          <li>{{ info.data2.title }}</li>
-          <li>{{ info.data2.genres }}</li>
-          <li>
-            <b-btn variant="primary" @click="rate(info.data2.movieId)">Rate</b-btn>
+            <b-btn variant="primary" @click="rate()">Rate</b-btn>
           </li>
         </ul>
+
+        <ul>
+          <li v-for="item in movies">
+            {{ item.title }}
+          </li>
+        </ul>
+
       </form>
     </div>
   </div>
@@ -32,55 +30,39 @@ export default {
   },
   data() {
     return {
-      count: 0,
-      info: {
-        data1: {
-          id: "",
-          movieId: "",
-          title: "",
-          genres: ""
-        },
-        data2: {
-          id: "",
-          movieId: "",
-          title: "",
-          genres: ""
-        }
-      }
+      el: "#movieList",
+      data: {
+        movies: []
+      },
+      movies:[]
     };
   },
   methods: {
-    async rate(id) {
-      console.log(this.$session.getAll());
-      if (this.info.data1.movieId == id) {
-        this.$session.set(id, this.$session.get(id) + 0.5);
-        this.$session.set(
-          this.info.data2.movieId,
-          this.$session.get(this.info.data2.movieId) - 0.5
-        );
-        this.$session.set(this.count, id + "," + this.info.data2.movieId);
-      } else {
-        this.$session.set(id, this.$session.get(id) + 0.5);
-        this.$session.set(
-          this.info.data1.movieId,
-          this.$session.get(this.info.data1.movieId) - 0.5
-        );
-        this.$session.set(this.count, id + "," + this.info.data1.movieId);
+    async rate() {
+      const movieIds = this.$session.get("movieIds");
+      const movieIdsList = movieIds.split(",");
+      for (let i = 0; i < movieIdsList.length; i++) {
+        console.log();
       }
-      this.count++;
-      
     },
-    async getMovies() {}
-  },
-  async mounted() {
-    console.log(this.$session.getAll());
+    async getMovies() {
+      const movieIds = this.$session.get("movieIds");
+      const movieIdsList = movieIds.split(",");
 
-    const movieIds = this.$session.get("movieIds");
-    const movieIdsList = movieIds.split(",");
-    const res = await MovieAPI.getMovie(movieIdsList[0]);
-    const res1 = await MovieAPI.getMovie(movieIdsList[1]);
-    this.info.data1 = res.data;
-    this.info.data2 = res1.data;
+      var moviesArray = [];
+      for (let i = 0; i < movieIdsList.length; i++) {
+        const element = movieIdsList[i];
+        const res = await MovieAPI.getMovie(element);
+        moviesArray[i] = res.data;
+        // this.movies[i] = res.data;
+      }
+      this.movies = moviesArray;
+      console.log(this.movies);
+    }
+  },
+  mounted() {
+    // console.log(this.$session.getAll());
+    this.getMovies();
   }
 };
 </script>
