@@ -67,7 +67,7 @@ export default {
           rating: this.rating,
           timestamp: new Date().getTime()
         };
-        await MovieAPI.postRate(params);
+        await MovieAPI.postsRate(params);
 
         this.loadinfo();
 

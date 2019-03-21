@@ -20,11 +20,12 @@ from rest_framework_mongoengine import routers as merouters
 
 from backend.Recommend.views import (LinksViewSet, MoviesViewSet,
                                      RatingsViewSet, TagsViewSet,
-                                     cRatingsViewSet, gcRatingsViewSet, rMoviesViewSet)
+                                     cRatingsViewSet, gcRatingsViewSet, rMoviesViewSet, sRatingsViewSet)
 
 merouter = merouters.DefaultRouter()
 merouter.register(r'rm', rMoviesViewSet)
 merouter.register(r'r', RatingsViewSet)
+merouter.register(r'sr', sRatingsViewSet)
 merouter.register(r'cr', cRatingsViewSet)
 merouter.register(r'gcr', gcRatingsViewSet)
 merouter.register(r'l', LinksViewSet)

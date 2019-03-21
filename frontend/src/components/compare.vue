@@ -3,14 +3,13 @@
     <div class="container">
       <form class="my-5">
         <h3>Movie Info</h3>
-        <ul id="movieList">
+        <draggable v-model="movies" @start="drag=true" @end="drag=false">
+          <div class="container" v-for="item in movies" :key="item.id">{{item.title}}</div>
+        </draggable>
+        <ul>
           <li>
             <b-btn variant="primary" @click="rate()">Rate</b-btn>
           </li>
-        </ul>
-
-        <ul>
-          <li v-for="item in movies">{{ item.title }}</li>
         </ul>
       </form>
     </div>
@@ -19,8 +18,11 @@
 
 <script>
 import MovieAPI from "@/api/movie.js";
-
+import draggable from "vuedraggable";
 export default {
+  components: {
+    draggable
+  },
   name: "compare",
   metaInfo: {
     title: "Item Page"
@@ -35,11 +37,19 @@ export default {
     };
   },
   methods: {
-    async rate() {
-      const movieIds = this.$session.get("movieIds");
-      const movieIdsList = movieIds.split(",");
-      for (let i = 0; i < movieIdsList.length; i++) {
-        console.log();
+     rate() {
+      var rating = 5;
+      for (let i = 0; i < this.movies.length; i++) {
+        const movie = this.movies[i];
+        const params = {
+          userId: this.$session.get("userId"),
+          movieId: movie.movieId,
+          rating: rating,
+          timestamp: new Date().getTime()
+        };
+        MovieAPI.postcRate(params);
+        console.log(params);
+        rating-= 0.5;
       }
     },
     async getMovies() {
@@ -51,14 +61,11 @@ export default {
         const element = movieIdsList[i];
         const res = await MovieAPI.getMovie(element);
         moviesArray[i] = res.data;
-        // this.movies[i] = res.data;
       }
       this.movies = moviesArray;
-      console.log(this.movies);
     }
   },
   mounted() {
-    // console.log(this.$session.getAll());
     this.getMovies();
   }
 };

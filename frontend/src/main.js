@@ -11,12 +11,16 @@ import VueAxios from 'vue-axios'
 
 import BootstrapVue from 'bootstrap-vue'
 import VueSession from 'vue-session'
+import draggable from 'vuedraggable'
 Vue.use(VueSession)
 
 Vue.component('star-rating', StarRating);
 Vue.use(VueAxios, axios);
 Vue.use(BootstrapVue);
 Vue.use(router);
+
+
+Vue.component(draggable);
 
 
 Vue.config.productionTip = false

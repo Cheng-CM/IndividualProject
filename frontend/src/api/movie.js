@@ -6,7 +6,10 @@ class MovieAPI {
     getRandomMovie(){
         return Vue.prototype.axios.get("http://localhost:8000/api/rm/");
     } 
-    postRate(params){
+    postsRate(params){
+        return Vue.prototype.axios.post("http://localhost:8000/api/sr/?", params);
+    }
+    postcRate(params){
         return Vue.prototype.axios.post("http://localhost:8000/api/cr/?", params);
     }
     getgtUserid(){

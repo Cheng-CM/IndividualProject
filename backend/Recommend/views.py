@@ -5,10 +5,10 @@ from django.shortcuts import render
 from rest_framework_mongoengine import viewsets as meviewsets
 
 from backend.Recommend.models import (Links, Movies, Ratings, Tags,
-                                      custom_ratings)
+                                      scale_ratings,compare_ratings)
 from backend.Recommend.serializers import (LinksSerializer, MoviesSerializer,
                                            RatingsSerializer, TagsSerializer,
-                                           cRatingsSerializer)
+                                           sRatingsSerializer, cRatingsSerializer)
 
 idList = []
 for self in Movies.objects:
@@ -41,15 +41,20 @@ class RatingsViewSet(meviewsets.ModelViewSet):
 
 class cRatingsViewSet(meviewsets.ModelViewSet):
     lookup_field = 'id'
-    queryset = custom_ratings.objects.all()
+    queryset = compare_ratings.objects.all()
     serializer_class = cRatingsSerializer
+
+class sRatingsViewSet(meviewsets.ModelViewSet):
+    lookup_field = 'id'
+    queryset = scale_ratings.objects.all()
+    serializer_class = sRatingsSerializer
 
 
 class gcRatingsViewSet(meviewsets.ModelViewSet):
     def get_queryset(self):
-        return custom_ratings.objects.all().order_by('-userId').limit(1)
-    queryset = get_queryset(custom_ratings)
-    serializer_class = cRatingsSerializer
+        return scale_ratings.objects.all().order_by('-userId').limit(1)
+    queryset = get_queryset(scale_ratings)
+    serializer_class = sRatingsSerializer
 
 class LinksViewSet(meviewsets.ModelViewSet):
     lookup_field = 'id'
