@@ -2,9 +2,9 @@ import os
 
 import pandas as pd
 from surprise import SVD, Dataset, Reader, dump
-
-Model = pd.read_csv("./data/ml-latest-small/ratings.csv", low_memory=False)
-
+import pandasMongo as pdmo
+# Model = pd.read_csv("./data/ml-latest-small/ratings.csv", low_memory=False)
+Model = pdmo.read_mongo('movielens', 'ratings')
 # reader used by surprise
 reader = Reader(rating_scale=(0.5, 5))
 

@@ -2,7 +2,7 @@ from collections import defaultdict
 
 import pandas as pd
 from surprise import SVD, Dataset, Reader, dump
-
+import pandasMongo as pdmo
 
 def get_top_n(predictions, n=10):
     '''Return the top-N recommendation for each user from a set of predictions.
@@ -30,11 +30,13 @@ def get_top_n(predictions, n=10):
 
     return top_n
 
-Model = pd.read_csv("./data/ml-latest-small/ratings.csv", low_memory=False)
-
+# Model = pd.read_csv("./data/ml-latest-small/ratings.csv", low_memory=False)
+Model = pdmo.read_mongo('movielens', 'ratings')
+scale_ratings = pdmo.read_mongo('movielens', 'scale_ratings')
+compare_ratings = pdmo.read_mongo('movielens', 'compare_ratings')
 
 # reader used by surprise
-reader = Reader(rating_scale=(0.5, 5))
+reader = Reader(rating_scale=(0, 5))
 
 data = Dataset.load_from_df(Model[["userId", "movieId", "rating"]], reader)
 trainset = data.build_full_trainset()
