@@ -33,7 +33,8 @@ def get_top_n(predictions, n=10):
 # Model = pd.read_csv("./data/ml-latest-small/ratings.csv", low_memory=False)
 Model = pdmo.read_mongo('movielens', 'ratings')
 scale_ratings = pdmo.read_mongo('movielens', 'scale_ratings')
-compare_ratings = pdmo.read_mongo('movielens', 'compare_ratings')
+Model = Model.append(scale_ratings)
+# compare_ratings = pdmo.read_mongo('movielens', 'compare_ratings')
 
 # reader used by surprise
 reader = Reader(rating_scale=(0, 5))
@@ -42,16 +43,18 @@ data = Dataset.load_from_df(Model[["userId", "movieId", "rating"]], reader)
 trainset = data.build_full_trainset()
 
 # First train an SVD algorithm on the movielens dataset.
-# algo = SVD()
-# algo.fit(trainset)
+algo = SVD()
+algo.fit(trainset)
 
-# Load dumped algorithm.
-file_name = ('./data/ml-latest-small/ml-latest-small_testset')
-_, loaded_algo = dump.load(file_name)
+# # Load dumped algorithm.
+# file_name = ('./data/ml-latest-small/ml-latest-small_testset')
+# _, loaded_algo = dump.load(file_name)
 
 
 # Than predict ratings for all pairs (u, i) that are NOT in the training set.
-predictions = loaded_algo.test(trainset.build_anti_testset())
+# predictions = loaded_algo.test(trainset.build_anti_testset())
+predictions = algo.test(trainset.build_anti_testset())
+
 
 top_n = get_top_n(predictions, n=10)
 
