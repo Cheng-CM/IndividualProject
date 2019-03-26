@@ -63,6 +63,7 @@ export default {
       if (this.$session.get("ratecount") >= 10) {
         this.$router.push("/cRating");
       } else {
+        this.loadinfo();
         const params = {
           userId: this.$session.get("userId"),
           movieId: this.info.data.movieId,
@@ -78,23 +79,19 @@ export default {
           this.$session.set("movieIds", this.info.data.movieId);
         }
 
-        var rc = this.$session.get("ratecount");
-        this.$session.set("ratecount", ++rc);
+        this.$session.set("ratecount", this.$session.get("ratecount") + 1);
 
         if (this.$session.get("ratecount") >= 10) {
           this.$router.push("/cRating");
         }
-        this.loadinfo();
       }
     },
     async loadinfo() {
       const res = await MovieAPI.getRandomMovie();
       this.info.data = res.data[0];
-      const linkres = await MovieAPI.getLink(res.data[0].movieId);
-      var tmdbId = linkres.data.tmdbId;
-      const Imageres = await MovieAPI.getMovieImage(tmdbId);
-      console.log(Imageres.data.posters[0].file_path);
-      this.img = Imageres.data.posters[0].file_path;
+
+      this.loadPoster(res.data[0].movieId);
+
       this.resetStar();
       this.movies = this.$session.get("ratecount");
     },
