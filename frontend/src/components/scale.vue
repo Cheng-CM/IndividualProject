@@ -5,6 +5,9 @@
         <h3>Movie Info</h3>
         <div class="container"></div>
         <ul>
+          <li>
+            <img v-bind:src="'https://image.tmdb.org/t/p/w342/' + this.img">
+          </li>
           <li>{{ info.data.title }}</li>
           <li>{{ info.data.genres }}</li>
           <li>
@@ -51,13 +54,12 @@ export default {
           title: "",
           genres: ""
         }
-      }
+      },
+      img: ""
     };
   },
   methods: {
     async rate() {
-      console.log(this.$session.getAll());
-      
       if (this.$session.get("ratecount") >= 10) {
         this.$router.push("/cRating");
       } else {
@@ -68,8 +70,6 @@ export default {
           timestamp: new Date().getTime()
         };
         await MovieAPI.postsRate(params);
-
-        this.loadinfo();
 
         if (this.$session.has("movieIds")) {
           var mIds = this.$session.get("movieIds");
@@ -84,14 +84,28 @@ export default {
         if (this.$session.get("ratecount") >= 10) {
           this.$router.push("/cRating");
         }
+        this.loadinfo();
       }
     },
     async loadinfo() {
       const res = await MovieAPI.getRandomMovie();
       this.info.data = res.data[0];
+      const linkres = await MovieAPI.getLink(res.data[0].movieId);
+      var tmdbId = linkres.data.tmdbId;
+      const Imageres = await MovieAPI.getMovieImage(tmdbId);
+      console.log(Imageres.data.posters[0].file_path);
+      this.img = Imageres.data.posters[0].file_path;
       this.resetStar();
       this.movies = this.$session.get("ratecount");
     },
+    async loadPoster(params) {
+      const linkres = await MovieAPI.getLink(params);
+      var tmdbId = linkres.data.tmdbId;
+      const Imageres = await MovieAPI.getMovieImage(tmdbId);
+      console.log(Imageres.data.posters[0].file_path);
+      this.img = Imageres.data.posters[0].file_path;
+    },
+
     resetStar() {
       this.rating = 0;
     }

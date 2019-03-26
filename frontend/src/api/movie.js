@@ -15,6 +15,12 @@ class MovieAPI {
     getgtUserid(){
         return Vue.prototype.axios.get("http://localhost:8000/api/gcr/");
     } 
+    getLink(params){
+        return Vue.prototype.axios.get("http://localhost:8000/api/l/" + params);
+    } 
+    getMovieImage(params){
+        return Vue.prototype.axios.get("https://api.themoviedb.org/3/movie/"+ params +"/images?api_key=34132d035e63f344a5eb1a1ac50e64e2&language=en");
+    } 
     
     
 }

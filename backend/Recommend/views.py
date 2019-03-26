@@ -57,7 +57,7 @@ class gcRatingsViewSet(meviewsets.ModelViewSet):
     serializer_class = sRatingsSerializer
 
 class LinksViewSet(meviewsets.ModelViewSet):
-    lookup_field = 'id'
+    lookup_field = 'movieId'
     queryset = Links.objects.all()
     serializer_class = LinksSerializer
 
