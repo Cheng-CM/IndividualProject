@@ -1,15 +1,16 @@
 <template>
-  <div class="hello">
-    <div class="container">
+  <div>
+    <div class="container border rounded w-75">
       <form class="my-5">
         <h3>Movie Info</h3>
-        <div class="container"></div>
         <ul>
-          <li>
-            <img v-bind:src="'https://image.tmdb.org/t/p/w342/' + this.img">
-          </li>
-          <li>{{ info.data.title }}</li>
-          <li>{{ info.data.genres }}</li>
+          <div class="column">
+            <img class="ml-5" v-bind:src="'https://image.tmdb.org/t/p/w185/' + this.img">
+            <div class="row mt-5 ml-3">
+              <div class="row">Movie Title: {{ info.data.title }}</div>
+              <div class="row">Genres: {{ info.data.genres }}</div>
+            </div>
+          </div>
           <li>
             <b-form-group label="Rating:" class="col-sm">
               <star-rating
