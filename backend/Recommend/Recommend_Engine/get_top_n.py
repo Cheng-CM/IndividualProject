@@ -2,7 +2,11 @@ from collections import defaultdict
 
 import pandas as pd
 from surprise import SVD, Dataset, Reader, dump
-import pandasMongo as pdmo
+from surprise.model_selection import cross_validate
+import backend.Recommend.Recommend_Engine.pandasMongo as pdmo
+
+
+Model = pdmo.read_mongo('movielens', 'ratings')
 
 def get_top_n(predictions, n=10):
     '''Return the top-N recommendation for each user from a set of predictions.
@@ -31,33 +35,66 @@ def get_top_n(predictions, n=10):
     return top_n
 
 # Model = pd.read_csv("./data/ml-latest-small/ratings.csv", low_memory=False)
-Model = pdmo.read_mongo('movielens', 'ratings')
-scale_ratings = pdmo.read_mongo('movielens', 'scale_ratings')
-Model = Model.append(scale_ratings)
-# compare_ratings = pdmo.read_mongo('movielens', 'compare_ratings')
 
-# reader used by surprise
-reader = Reader(rating_scale=(0, 5))
+def getScaleRecommendResult():
+    # Model = pd.read_csv("./data/ml-latest-small/ratings.csv", low_memory=False)
+    scale_ratings = pdmo.read_mongo('movielens', 'scale_ratings')
+    scale_ratings = scale_ratings.append(Model)
+    # compare_ratings = pdmo.read_mongo('movielens', 'compare_ratings')
 
-data = Dataset.load_from_df(Model[["userId", "movieId", "rating"]], reader)
-trainset = data.build_full_trainset()
+    # reader used by surprise
+    reader = Reader(rating_scale=(0, 5))
 
-# First train an SVD algorithm on the movielens dataset.
-algo = SVD()
-algo.fit(trainset)
+    data = Dataset.load_from_df(scale_ratings[["userId", "movieId", "rating"]], reader)
+    trainset = data.build_full_trainset()
 
-# # Load dumped algorithm.
-# file_name = ('./data/ml-latest-small/ml-latest-small_testset')
-# _, loaded_algo = dump.load(file_name)
+    # First train an SVD algorithm on the movielens dataset.
+    algo = SVD()
+    algo.fit(trainset)
 
-
-# Than predict ratings for all pairs (u, i) that are NOT in the training set.
-# predictions = loaded_algo.test(trainset.build_anti_testset())
-predictions = algo.test(trainset.build_anti_testset())
+    # # Load dumped algorithm.
+    # file_name = ('./data/ml-latest-small/ml-latest-small_testset')
+    # _, loaded_algo = dump.load(file_name)
 
 
-top_n = get_top_n(predictions, n=10)
+    # Run 5-fold cross-validation and print results
+    RMSE = cross_validate(algo, data, measures=['RMSE', 'MAE'], cv=5, verbose=True)
+    print(RMSE)
 
-# Print the recommended items for each user
-for uid, user_ratings in top_n.items():
-    print(uid, [iid for (iid, _) in user_ratings])
+    # Than predict ratings for all pairs (u, i) that are NOT in the training set.
+    # predictions = loaded_algo.test(trainset.build_anti_testset())
+    predictions = algo.test(trainset.build_anti_testset())
+
+
+    top_n = get_top_n(predictions, n=10)
+
+    # Print the recommended items for each user
+    # for uid, user_ratings in top_n.items():
+    #     print(uid, [iid for (iid, _) in user_ratings])
+    return(top_n)
+
+
+def getCompareRecommendResult():
+    
+    compare_ratings = pdmo.read_mongo('movielens', 'compare_ratings')
+    compare_ratings = compare_ratings.append(Model)
+    
+    # reader used by surprise
+    reader = Reader(rating_scale=(0.5, 5))
+
+    data = Dataset.load_from_df(compare_ratings[["userId", "movieId", "rating"]], reader)
+    trainset = data.build_full_trainset()
+
+    # First train an SVD algorithm on the movielens dataset.
+    algo = SVD()
+    algo.fit(trainset)
+
+    # Run 5-fold cross-validation and print results
+    RMSE = cross_validate(algo, data, measures=['RMSE', 'MAE'], cv=5, verbose=True)
+    print(RMSE)
+    # Than predict ratings for all pairs (u, i) that are NOT in the training set.
+    predictions = algo.test(trainset.build_anti_testset())
+
+    top_n = get_top_n(predictions, n=10)
+
+    return(top_n)

@@ -16,8 +16,35 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
+from django.http import HttpResponse
+from .Recommend.Recommend_Engine import get_top_n
+import json
+
+
+def myview(request):
+    s_top_n = get_top_n.getScaleRecommendResult()
+    
+    json_data = json.dumps("")
+    for uid, user_ratings in s_top_n.items():
+        data = {}
+        # if uid >= 1000:
+        data[uid] = [iid for (iid, _) in user_ratings]
+        json_data = json_data + json.dumps(data)
+
+    # c_top_n = get_top_n.getCompareRecommendResult()
+    # data = "c:"
+    # json_data = json.dumps(data)
+    # for uid, user_ratings in c_top_n.items():
+    #     data = {}
+    #     if uid >= 1000:
+    #         data[uid] = [iid for (iid, _) in user_ratings]
+    #         json_data = json_data + json.dumps(data)
+
+    return HttpResponse(json_data)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('backend.Recommend.urls')),
+    path('recommend/', myview),
 ]

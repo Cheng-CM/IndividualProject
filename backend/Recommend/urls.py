@@ -17,7 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
 from rest_framework_mongoengine import routers as merouters
-
+from django.http import HttpResponse
 from backend.Recommend.views import (LinksViewSet, MoviesViewSet,
                                      RatingsViewSet, TagsViewSet,
                                      cRatingsViewSet, gcRatingsViewSet, rMoviesViewSet, sRatingsViewSet)

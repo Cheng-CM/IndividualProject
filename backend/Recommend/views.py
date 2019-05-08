@@ -5,10 +5,11 @@ from django.shortcuts import render
 from rest_framework_mongoengine import viewsets as meviewsets
 
 from backend.Recommend.models import (Links, Movies, Ratings, Tags,
-                                      scale_ratings,compare_ratings)
+                                      scale_ratings, compare_ratings)
 from backend.Recommend.serializers import (LinksSerializer, MoviesSerializer,
                                            RatingsSerializer, TagsSerializer,
                                            sRatingsSerializer, cRatingsSerializer)
+from django.http import HttpResponse
 
 idList = []
 for self in Movies.objects:
