@@ -6,9 +6,9 @@
         <ul>
           <div class="column">
             <img class="ml-5" v-bind:src="'https://image.tmdb.org/t/p/w185/' + this.img">
-            <div class="row mt-5 ml-3">
-              <div class="row">Movie Title: {{ info.data.title }}</div>
-              <div class="row">Genres: {{ info.data.genres }}</div>
+            <div class="row mt-5 ml-3 align-middle">
+              <div class="ml-5">Movie Title: {{ info.data.title }}</div>
+              <div class="ml-5">Genres: {{ info.data.genres }}</div>
             </div>
           </div>
           <li>
@@ -64,7 +64,6 @@ export default {
       if (this.$session.get("ratecount") >= 10) {
         this.$router.push("/cRating");
       } else {
-        this.loadinfo();
         const params = {
           userId: this.$session.get("userId"),
           movieId: this.info.data.movieId,
@@ -72,6 +71,7 @@ export default {
           timestamp: new Date().getTime()
         };
         await MovieAPI.postsRate(params);
+        this.loadinfo();
 
         if (this.$session.has("movieIds")) {
           var mIds = this.$session.get("movieIds");
@@ -86,6 +86,7 @@ export default {
           this.$router.push("/cRating");
         }
       }
+      console.log(this.$session.get("movieIds"));
     },
     async loadinfo() {
       const res = await MovieAPI.getRandomMovie();
