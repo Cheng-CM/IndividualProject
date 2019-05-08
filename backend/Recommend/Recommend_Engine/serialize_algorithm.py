@@ -19,7 +19,7 @@ algo.fit(trainset)
 predictions = algo.test(trainset.build_anti_testset())
 
 # Dump algorithm and reload it.
-file_name = ('./data/ml-latest-small/ml-latest-small_testset')
+file_name = ('../data/ml-latest-small/ml-latest-small_testset')
 dump.dump(file_name, algo=algo)
 _, loaded_algo = dump.load(file_name)
 
