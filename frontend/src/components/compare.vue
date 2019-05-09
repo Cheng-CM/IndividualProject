@@ -7,7 +7,7 @@
           <div class="container" v-for="(item) in movies" :key="item.id">
             {{item.title}}
             <img
-              v-bind:src="'https://image.tmdb.org/t/p/w185/' + img[item.movieId]"
+              v-if="img[item.movieId]" v-bind:src="'https://image.tmdb.org/t/p/w185/' + img[item.movieId]"
             >
           </div>
         </draggable>
@@ -56,6 +56,7 @@ export default {
         MovieAPI.postcRate(params);
         rating -= 0.5;
       }
+       this.$router.push("/result");
     },
     async getMovies() {
       const movieIds = this.$session.get("movieIds");
@@ -66,9 +67,10 @@ export default {
         const linkres = await MovieAPI.getLink(element);
         var tmdbId = linkres.data.tmdbId;
         const Imageres = await MovieAPI.getMovieImage(tmdbId);
-        this.img[element] = Imageres.data.posters[0].file_path;
+        if (Imageres.data.posters[0] != null) {
+          this.img[element] = Imageres.data.posters[0].file_path;
+        }
         const res = await MovieAPI.getMovie(element);
-        
         moviesArray[i] = res.data;
       }
       this.movies = moviesArray;
