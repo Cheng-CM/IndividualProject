@@ -48,7 +48,7 @@ def getRecommendResult(modelId, UserId):
     if modelId == 0:
         reader = Reader(rating_scale=(0, 5))
     else:
-        reader = Reader(rating_scale=(0, 5))
+        reader = Reader(rating_scale=(0.5, 5))
 
     data = Dataset.load_from_df(
         Model[["userId", "movieId", "rating"]], reader)
