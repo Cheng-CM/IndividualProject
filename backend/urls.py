@@ -22,25 +22,22 @@ import json
 
 
 def myview(request):
-    s_top_n = get_top_n.getScaleRecommendResult()
-    
-    json_data = json.dumps("")
-    for uid, user_ratings in s_top_n.items():
-        data = {}
-        # if uid >= 1000:
-        data[uid] = [iid for (iid, _) in user_ratings]
-        json_data = json_data + json.dumps(data)
+    userId = request.GET.get('id', '')
+    if userId != '':
+        s_top_n = get_top_n.getRecommendResult(0, userId)
+        c_top_n = get_top_n.getRecommendResult(1, userId)
 
-    # c_top_n = get_top_n.getCompareRecommendResult()
-    # data = "c:"
-    # json_data = json.dumps(data)
-    # for uid, user_ratings in c_top_n.items():
-    #     data = {}
-    #     if uid >= 1000:
-    #         data[uid] = [iid for (iid, _) in user_ratings]
-    #         json_data = json_data + json.dumps(data)
+        data = {
+            "Scale": s_top_n,       
+            "Compare": c_top_n
+        }
 
-    return HttpResponse(json_data)
+        # for uid, user_ratings in top_n.items():
+        #     data[uid] = [iid for (iid, _) in user_ratings]
+        json_data = json.dumps(data)
+        return HttpResponse(json_data)
+    else:
+        return HttpResponse("Error: No Id")
 
 
 urlpatterns = [
