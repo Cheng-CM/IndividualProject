@@ -1,12 +1,33 @@
 <template>
-  <div>
-    <!-- <div class="container" v-for="(item) in movies" :key="item.id">
-      {{item.title}}
-      <img
-        v-if="img[item.movieId]"
-        v-bind:src="'https://image.tmdb.org/t/p/w185/' + img[item.movieId]"
-      >
-    </div>-->
+  <div class="container">
+    <h3>Movie Info</h3>
+    <v-wait for="movieData">
+      <template slot="waiting">
+        <div>Loading the list...</div>
+      </template>
+      <div class="row">
+        <div class="col">
+          <div v-for="(item,index) in cr_list" :key="item.movieId">
+            <div>{{item.title}}</div>
+            <img
+              v-if="cr_image[index]"
+              v-bind:src="'https://image.tmdb.org/t/p/w185/' + cr_image[index]"
+            >
+          </div>
+          <b-btn variant="primary" @click="rate(0)">Rate</b-btn>
+        </div>
+        <div class="col">
+          <div v-for="(item,index) in sr_list" :key="item.movieId">
+            <div>{{item.title}}</div>
+            <img
+              v-if="sr_image[index]"
+              v-bind:src="'https://image.tmdb.org/t/p/w185/' + sr_image[index]"
+            >
+          </div>
+          <b-btn variant="primary" @click="rate(1)">Rate</b-btn>
+        </div>
+      </div>
+    </v-wait>
   </div>
 </template>
 <script>
@@ -17,12 +38,7 @@ export default {
     title: "Result Page"
   },
   data() {
-    return {
-      cr_list: [],
-      cr_image: [],
-      sr_list: [],
-      sr_image: []
-    };
+    return { cr_list: [], cr_image: [], sr_list: [], sr_image: [] };
   },
   mounted() {
     if (this.$session.get("ratecount") < 10) {
@@ -32,32 +48,45 @@ export default {
   },
   methods: {
     async loadinfo() {
+      this.$wait.start("movieData");
       var res = await MovieAPI.getRecommendResult(this.$session.get("userId"));
 
       for (let i = 0; i < res.data.Compare.length; i++) {
-        const element = res.data.Compare[i][0];
-        var movie = await MovieAPI.getMovie(element);
-        var link = await MovieAPI.getLink(element);
-        var tmdbId = link.data.tmdbId;
-        const Imageres = await MovieAPI.getMovieImage(tmdbId);
-        if (Imageres.data.posters[0] != null) {
-          this.cr_image[element] = Imageres.data.posters[0].file_path;
-        }
-        this.cr_list[element] = movie.data;
-      }
-      console.log(this.cr_list);
-      console.log(this.cr_image);
+        const celement = res.data.Compare[i][0];
+        const selement = res.data.Scale[i][0];
 
-      for (let i = 0; i < res.data.Scale.length; i++) {
-         const element = res.data.Compare[i][0];
-        var movie = await MovieAPI.getMovie(element);
-        var link = await MovieAPI.getLink(element);
+        var clink = await MovieAPI.getLink(celement);
+        var link = await MovieAPI.getLink(selement);
+        var cmovie = await MovieAPI.getMovie(celement);
+        this.$set(this.cr_list, i, cmovie.data);
+        // this.cr_list[i] = cmovie.data;
+        var smovie = await MovieAPI.getMovie(selement);
+        this.$set(this.sr_list, i, smovie.data);
+        // this.sr_list[i] = smovie.data;
+
+        var ctmdbId = clink.data.tmdbId;
         var tmdbId = link.data.tmdbId;
+
+        const cImageres = await MovieAPI.getMovieImage(ctmdbId);
         const Imageres = await MovieAPI.getMovieImage(tmdbId);
-        if (Imageres.data.posters[0] != null) {
-          this.sr_image[element] = Imageres.data.posters[0].file_path;
+
+        if (cImageres.data.posters[0] != null) {
+          this.$set(this.cr_image, i, cImageres.data.posters[0].file_path);
+          this.cr_image[i] = cImageres.data.posters[0].file_path;
         }
-        this.sr_list[element] = movie.data;
+
+        if (Imageres.data.posters[0] != null) {
+          this.$set(this.sr_image, i, Imageres.data.posters[0].file_path);
+          this.sr_image[i] = Imageres.data.posters[0].file_path;
+        }
+      }
+      this.$wait.end("movieData");
+    },
+    async rate(vote) {
+      if (vote == 0) {
+        console.log("Compare");
+      } else {
+        console.log("Scale");
       }
     }
   }

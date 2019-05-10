@@ -13,7 +13,9 @@ import BootstrapVue from 'bootstrap-vue'
 import VueSession from 'vue-session'
 import draggable from 'vuedraggable'
 Vue.use(VueSession)
+import VueWait from 'vue-wait'
 
+Vue.use(VueWait)
 Vue.component('star-rating', StarRating);
 Vue.use(VueAxios, axios);
 Vue.use(BootstrapVue);
@@ -27,5 +29,17 @@ Vue.config.productionTip = false
 
 new Vue({
   render: h => h(App),
-  router
+  router,
+  wait: new VueWait({
+    // Defaults values are following:
+    useVuex: false, // Uses Vuex to manage wait state
+    vuexModuleName: 'wait', // Vuex module name
+
+    registerComponent: true, // Registers `v-wait` component
+    componentName: 'v-wait', // <v-wait> component name, you can set `my-loader` etc.
+
+    registerDirective: true, // Registers `v-wait` directive
+    directiveName: 'wait', // <span v-wait /> directive name, you can set `my-loader` etc.
+
+  }),
 }).$mount('#app')

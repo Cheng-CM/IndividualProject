@@ -1,21 +1,18 @@
 <template>
-  <div class="hello">
+  <div class="container">
+    <h3>Movie Info</h3>
     <div class="container">
-      <form class="my-5">
-        <h3>Movie Info</h3>
-        <draggable v-model="movies" @start="drag=true" @end="drag=false" >
-          <div class="container" v-for="(item) in movies" :key="item.id">
-            {{item.title}}
+      <form>
+        <draggable v-model="movies" @start="drag=true" @end="drag=false">
+          <div v-for="(item) in movies" :key="item.id">
+            <div>{{item.title}}</div>
             <img
-              v-if="img[item.movieId]" v-bind:src="'https://image.tmdb.org/t/p/w185/' + img[item.movieId]"
+              v-if="img[item.movieId]"
+              v-bind:src="'https://image.tmdb.org/t/p/w185/' + img[item.movieId]"
             >
           </div>
         </draggable>
-        <ul>
-          <li>
-            <b-btn variant="primary" @click="rate()">Rate</b-btn>
-          </li>
-        </ul>
+        <b-btn variant="primary" @click="rate()">Rate</b-btn>
       </form>
     </div>
   </div>
@@ -56,7 +53,7 @@ export default {
         MovieAPI.postcRate(params);
         rating -= 0.5;
       }
-       this.$router.push("/result");
+      this.$router.push("/result");
     },
     async getMovies() {
       const movieIds = this.$session.get("movieIds");
