@@ -49,7 +49,9 @@ export default {
   methods: {
     async loadinfo() {
       this.$wait.start("movieData");
-      var res = await MovieAPI.getRecommendResult(this.$session.get("userId"));
+      const res = await MovieAPI.getRecommendResult(
+        this.$session.get("userId")
+      );
 
       for (let i = 0; i < res.data.Compare.length; i++) {
         const celement = res.data.Compare[i][0];
@@ -59,10 +61,8 @@ export default {
         var link = await MovieAPI.getLink(selement);
         var cmovie = await MovieAPI.getMovie(celement);
         this.$set(this.cr_list, i, cmovie.data);
-        // this.cr_list[i] = cmovie.data;
         var smovie = await MovieAPI.getMovie(selement);
         this.$set(this.sr_list, i, smovie.data);
-        // this.sr_list[i] = smovie.data;
 
         var ctmdbId = clink.data.tmdbId;
         var tmdbId = link.data.tmdbId;
@@ -83,11 +83,24 @@ export default {
       this.$wait.end("movieData");
     },
     async rate(vote) {
+      var res = await MovieAPI.getRecommendResult(this.$session.get("userId"));
       if (vote == 0) {
         console.log("Compare");
+        const params = {
+          'result': "Compare",
+          content: res
+        };
+        var message = await MovieAPI.postResult(params);
       } else {
         console.log("Scale");
+        const params = {
+          result: "Scale",
+          content: res
+        };
+        var message = await MovieAPI.postResult(params);
       }
+      console.log(message);
+      this.$router.push('/end');
     }
   }
 };

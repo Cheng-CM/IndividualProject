@@ -24,6 +24,9 @@ class MovieAPI {
     getRecommendResult(params) {
         return Vue.prototype.axios.get("http://localhost:8000/recommend/?id=" + params);
     }
+    postResult(params) {
+        return Vue.prototype.axios.post("http://localhost:8000/result", params);
+    }
 
 
 }

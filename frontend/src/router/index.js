@@ -4,6 +4,7 @@ import scale from '@/components/scale'
 import compare from '@/components/compare'
 import main from '@/components/main'
 import result from '@/components/result'
+import end from '@/components/end'
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -26,6 +27,11 @@ export default new VueRouter({
     name: "Result",
     path: '/result',
     component: result
+  },
+  {
+    name: "End",
+    path: '/end',
+    component: end
   },
 
   ]
