@@ -41,17 +41,16 @@ export default {
   },
   methods: {
     rate() {
-      var rating = 5;
+      var rating = [5,4.5,4,3.5,3.25,2.75,2.5,2,1.5,1];
       for (let i = 0; i < this.movies.length; i++) {
         const movie = this.movies[i];
         const params = {
           userId: this.$session.get("userId"),
           movieId: movie.movieId,
-          rating: rating,
+          rating: rating[i],
           timestamp: new Date().getTime()
         };
         MovieAPI.postcRate(params);
-        rating -= 0.5;
       }
       this.$router.push("/result");
     },

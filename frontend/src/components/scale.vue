@@ -1,38 +1,36 @@
 <template>
   <div>
     <div class="container border rounded w-75">
-      <form class="my-5">
+      <form>
         <h3>Movie Info</h3>
         <ul>
-          <div class="column">
-            <img class="ml-5" v-bind:src="'https://image.tmdb.org/t/p/w185/' + this.img">
-            <div class="row mt-5 ml-3 align-middle">
-              <div class="ml-5">Movie Title: {{ info.data.title }}</div>
-              <div class="ml-5">Genres: {{ info.data.genres }}</div>
-            </div>
+          <div>{{ selected[page].movie.title }}</div>
+          <img
+            v-if=" selected[page].poster"
+            v-bind:src="'https://image.tmdb.org/t/p/w154/' +  selected[page].poster"
+          >
+          <div>
+            <star-rating
+              v-model="rating[page]"
+              :glow="5"
+              :increment="0.5"
+              :rounded-corners="true"
+              :star-points="[23,2, 14,17, 0,19, 10,34, 7,50, 23,43, 38,50, 36,34, 46,19, 31,17]"
+              :show-rating="false"
+            ></star-rating>
           </div>
-          <li>
-            <b-form-group label="Rating:" class="col-sm">
-              <star-rating
-                v-model="rating"
-                :glow="5"
-                :rounded-corners="true"
-                :star-points="[23,2, 14,17, 0,19, 10,34, 7,50, 23,43, 38,50, 36,34, 46,19, 31,17]"
-                :show-rating="false"
-              ></star-rating>
-            </b-form-group>
-          </li>
         </ul>
 
         <ul>
           <li>
-            <b-btn variant="primary" @click="rate()">Rate</b-btn>
+            <b-btn variant="primary" @click="move(page--)"><</b-btn>
           </li>
+          {{page+1}}
           <li>
-            <b-btn variant="primary" @click="loadinfo()">Have not seen it</b-btn>
+            <b-btn variant="primary" @click="move(page++)">></b-btn>
           </li>
-          <li>{{ movies }} / 10</li>
         </ul>
+        <b-btn variant="primary" @click="submit()">Submit</b-btn>
       </form>
     </div>
   </div>
@@ -47,73 +45,46 @@ export default {
   },
   data() {
     return {
-      rating: 0,
-      movies: 0,
-      info: {
-        data: {
-          id: "",
-          title: "",
-          genres: ""
-        }
-      },
-      img: ""
+      rating: [],
+      selected: [],
+      page: 0
     };
   },
   methods: {
-    async rate() {
-      if (this.$session.get("ratecount") >= 10) {
-        this.$router.push("/cRating");
-      } else {
-        const params = {
-          userId: this.$session.get("userId"),
-          movieId: this.info.data.movieId,
-          rating: this.rating,
-          timestamp: new Date().getTime()
-        };
-        await MovieAPI.postsRate(params);
-        this.loadinfo();
-
-        if (this.$session.has("movieIds")) {
-          var mIds = this.$session.get("movieIds");
-          this.$session.set("movieIds", mIds + "," + this.info.data.movieId);
-        } else {
-          this.$session.set("movieIds", this.info.data.movieId);
-        }
-
-        this.$session.set("ratecount", this.$session.get("ratecount") + 1);
-
-        if (this.$session.get("ratecount") >= 10) {
-          this.$router.push("/cRating");
-        }
-      }
-      console.log(this.$session.get("movieIds"));
-    },
+    async rate() {},
     async loadinfo() {
-      const res = await MovieAPI.getRandomMovie();
-      this.info.data = res.data[0];
-
-      this.loadPoster(res.data[0].movieId);
-
-      this.resetStar();
-      this.movies = this.$session.get("ratecount");
+      this.selected = this.$session.get("movies");
+      console.log(this.selected[0].movie.title);
     },
-    async loadPoster(params) {
-      const linkres = await MovieAPI.getLink(params);
-      var tmdbId = linkres.data.tmdbId;
-      const Imageres = await MovieAPI.getMovieImage(tmdbId);
-      console.log(Imageres.data.posters[0].file_path);
-      this.img = Imageres.data.posters[0].file_path;
+    move() {
+      if (this.page <= -1) {
+        this.page = 9;
+      } else if (this.page >= 10) {
+        this.page = 0;
+      }
     },
-
-    resetStar() {
-      this.rating = 0;
+    submit() {
+      var length = 0;
+      this.rating.forEach(element => {
+          length++;
+      });
+      
+      if (length == 10) {
+        for (let i = 0; i < this.selected.length; i++) {
+          this.selected[i].scale = this.rating[i];
+        }
+        this.$session.set("movies", this.selected);
+        this.$router.push("/3");
+      }
     }
   },
   mounted() {
-    if (this.$session.get("ratecount") >= 10) {
-      this.$router.push("/cRating");
+    console.log(this.$session.get("movies"));
+    if (this.$session.get("movies")) {
+      this.loadinfo();
+    } else {
+      this.$router.push("/1");
     }
-    this.loadinfo();
   }
 };
 </script>

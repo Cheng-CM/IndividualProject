@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 import pandas as pd
-from surprise import SVD, Dataset, Reader, dump
+from surprise import SVD, Dataset, Reader, dump,KNNBaseline,KNNBasic
 from surprise.model_selection import cross_validate
 import backend.Recommend.Recommend_Engine.pandasMongo as pdmo
 import datetime
@@ -36,19 +36,16 @@ def get_top_n(predictions, n=10):
 
 
 def getRecommendResult(modelId, UserId):
-    # movielensModel = pdmo.read_mongo('movielens', 'ratings')
+    movielensModel = pdmo.read_mongo('movielens', 'ratings')
     if modelId == 0:
         Model = pdmo.read_mongo('movielens', 'scale_ratings')
     else:
         Model = pdmo.read_mongo('movielens', 'compare_ratings')
     # Command this to load faster/ Way more accurate
-    # Model = Model.append(movielensModel)
+    Model = Model.append(movielensModel)
 
     # reader used by surprise
-    if modelId == 0:
-        reader = Reader(rating_scale=(0, 5))
-    else:
-        reader = Reader(rating_scale=(0.5, 5))
+    reader = Reader(rating_scale=(1, 5))
 
     data = Dataset.load_from_df(
         Model[["userId", "movieId", "rating"]], reader)
@@ -56,7 +53,7 @@ def getRecommendResult(modelId, UserId):
     trainset = data.build_full_trainset()
 
     # First train an SVD algorithm on the movielens dataset.
-    algo = SVD()
+    algo = KNNBasic()
     algo.fit(trainset)
 
     # # Load dumped algorithm.

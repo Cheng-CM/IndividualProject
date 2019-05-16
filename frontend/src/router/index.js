@@ -5,34 +5,34 @@ import compare from '@/components/compare'
 import main from '@/components/main'
 import result from '@/components/result'
 import end from '@/components/end'
+import select from "@/components/select";
 Vue.use(VueRouter)
 
 export default new VueRouter({
   mode: 'history',
   routes: [{
+    name: "Main",
+    path: '/0',
+    component: main
+  }, {
+    name: "Select",
+    path: '/1',
+    component: select
+  }, {
     name: "Scale",
-    path: '/rRating',
+    path: '/2',
     component: scale
   }, {
     name: "Comparsion",
-    path: '/cRating',
+    path: '/3',
     component: compare
-  },
-  {
-    name: "Main",
-    path: '/main',
-    component: main
-  }, 
-  {
+  }, {
     name: "Result",
-    path: '/result',
+    path: '/4',
     component: result
-  },
-  {
+  }, {
     name: "End",
-    path: '/end',
+    path: '/5',
     component: end
-  },
-
-  ]
+  }]
 })
