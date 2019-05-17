@@ -11,7 +11,7 @@
             <div>{{item.title}}</div>
             <img
               v-if="cr_image[index]"
-              v-bind:src="'https://image.tmdb.org/t/p/w185/' + cr_image[index]"
+              v-bind:src="'https://image.tmdb.org/t/p/w92/' + cr_image[index]"
             >
           </div>
           <b-btn variant="primary" @click="rate(0)">Rate</b-btn>
@@ -21,7 +21,7 @@
             <div>{{item.title}}</div>
             <img
               v-if="sr_image[index]"
-              v-bind:src="'https://image.tmdb.org/t/p/w185/' + sr_image[index]"
+              v-bind:src="'https://image.tmdb.org/t/p/w92/' + sr_image[index]"
             >
           </div>
           <b-btn variant="primary" @click="rate(1)">Rate</b-btn>
@@ -37,21 +37,29 @@ export default {
   metaInfo: {
     title: "Result Page"
   },
+  computed: {
+    chunkedCompare() {
+      return chunk(this.cr_list, 5);
+    },
+    chunkedScale() {
+      return chunk(this.sr_list, 5);
+    }
+  },
   data() {
     return { cr_list: [], cr_image: [], sr_list: [], sr_image: [] };
   },
   mounted() {
-    if (this.$session.get("ratecount") < 10) {
-      this.$router.push("/main");
-    }
+    // if (this.$session.get("ratecount") < 10) {
+    //   this.$router.push("/main");
+    // }
     this.loadinfo();
   },
   methods: {
     async loadinfo() {
+      console.log(this.$session.get("userId"));
+      var userId = this.$session.get("userId");
       this.$wait.start("movieData");
-      const res = await MovieAPI.getRecommendResult(
-        this.$session.get("userId")
-      );
+      const res = await MovieAPI.getRecommendResult(userId);
 
       for (let i = 0; i < res.data.Compare.length; i++) {
         const celement = res.data.Compare[i][0];
@@ -59,16 +67,15 @@ export default {
 
         var clink = await MovieAPI.getLink(celement);
         var link = await MovieAPI.getLink(selement);
+
         var cmovie = await MovieAPI.getMovie(celement);
-        this.$set(this.cr_list, i, cmovie.data);
         var smovie = await MovieAPI.getMovie(selement);
+
+        const cImageres = await MovieAPI.getMovieImage(clink.data.tmdbId);
+        const Imageres = await MovieAPI.getMovieImage(link.data.tmdbId);
+
+        this.$set(this.cr_list, i, cmovie.data);
         this.$set(this.sr_list, i, smovie.data);
-
-        var ctmdbId = clink.data.tmdbId;
-        var tmdbId = link.data.tmdbId;
-
-        const cImageres = await MovieAPI.getMovieImage(ctmdbId);
-        const Imageres = await MovieAPI.getMovieImage(tmdbId);
 
         if (cImageres.data.posters[0] != null) {
           this.$set(this.cr_image, i, cImageres.data.posters[0].file_path);
@@ -82,12 +89,27 @@ export default {
       }
       this.$wait.end("movieData");
     },
+    async populate(element) {
+      var link = await MovieAPI.getLink(element);
+      var movie = await MovieAPI.getMovie(element);
+      const Imageres = await MovieAPI.getMovieImage(link.data.tmdbId);
+      var poster = null;
+      if (Imageres.data.posters[0] != null) {
+        poster = Imageres.data.posters[0].file_path;
+      }
+      var result = {
+        movie: movie,
+        poster: poster
+      };
+      console.log(result);
+      return result;
+    },
     async rate(vote) {
       var res = await MovieAPI.getRecommendResult(this.$session.get("userId"));
       if (vote == 0) {
         console.log("Compare");
         const params = {
-          'result': "Compare",
+          result: "Compare",
           content: res
         };
         var message = await MovieAPI.postResult(params);
@@ -100,7 +122,7 @@ export default {
         var message = await MovieAPI.postResult(params);
       }
       console.log(message);
-      this.$router.push('/end');
+      this.$router.push("/end");
     }
   }
 };
