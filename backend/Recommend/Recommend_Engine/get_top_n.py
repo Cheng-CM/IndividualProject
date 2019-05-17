@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 import pandas as pd
-from surprise import SVD, Dataset, Reader, dump,KNNBaseline,KNNBasic
+from surprise import SVD, Dataset, Reader, dump,KNNBaseline,KNNBasic,SVDpp
 from surprise.model_selection import cross_validate
 import backend.Recommend.Recommend_Engine.pandasMongo as pdmo
 import datetime
@@ -36,16 +36,16 @@ def get_top_n(predictions, n=10):
 
 
 def getRecommendResult(modelId, UserId):
-    movielensModel = pdmo.read_mongo('movielens', 'ratings')
+    # movielensModel = pdmo.read_mongo('movielens', 'ratings')
     if modelId == 0:
         Model = pdmo.read_mongo('movielens', 'scale_ratings')
     else:
         Model = pdmo.read_mongo('movielens', 'compare_ratings')
     # Command this to load faster/ Way more accurate
-    Model = Model.append(movielensModel)
+    # Model = Model.append(movielensModel)
 
     # reader used by surprise
-    reader = Reader(rating_scale=(1, 5))
+    reader = Reader(rating_scale=(0.5, 5))
 
     data = Dataset.load_from_df(
         Model[["userId", "movieId", "rating"]], reader)
@@ -53,7 +53,7 @@ def getRecommendResult(modelId, UserId):
     trainset = data.build_full_trainset()
 
     # First train an SVD algorithm on the movielens dataset.
-    algo = KNNBasic()
+    algo = SVDpp()
     algo.fit(trainset)
 
     # # Load dumped algorithm.
@@ -61,12 +61,16 @@ def getRecommendResult(modelId, UserId):
     # _, loaded_algo = dump.load(file_name)
 
     # Run 5-fold cross-validation and print results
-
+    if modelId == 0:
+        modelName = "Scale"
+    else:
+        modelName = "Compare"
+        
     RMSE = cross_validate(algo, data, measures=['RMSE'], cv=5, verbose=True)
 
     RSMEArray = RMSE['test_rmse'].tolist()
 
-    validationResult = {"Method": modelId,
+    validationResult = {"Method": modelName,
                         "RMSE": RSMEArray,
                         "RMSE_Mean": np.mean(RMSE['test_rmse']),
                         "date": datetime.datetime.utcnow()}
