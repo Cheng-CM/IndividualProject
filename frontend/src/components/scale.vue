@@ -3,33 +3,28 @@
     <div class="container border rounded w-75">
       <form>
         <h3>Movie Info</h3>
-        <ul>
-          <div>{{ selected[page].movie.title }}</div>
-          <img
-            v-if=" selected[page].poster"
-            v-bind:src="'https://image.tmdb.org/t/p/w154/' +  selected[page].poster"
-          >
-          <div>
-            <star-rating
-              v-model="rating[page]"
-              :glow="5"
-              :increment="0.5"
-              :rounded-corners="true"
-              :star-points="[23,2, 14,17, 0,19, 10,34, 7,50, 23,43, 38,50, 36,34, 46,19, 31,17]"
-              :show-rating="false"
-            ></star-rating>
-          </div>
-        </ul>
 
-        <ul>
-          <li>
-            <b-btn variant="primary" @click="move(page--)"><</b-btn>
-          </li>
-          {{page+1}}
-          <li>
-            <b-btn variant="primary" @click="move(page++)">></b-btn>
-          </li>
-        </ul>
+        <div>{{ selected[page].movie.title }}</div>
+        <img
+          v-if=" selected[page].poster"
+          v-bind:src="'https://image.tmdb.org/t/p/w154/' +  selected[page].poster"
+        >
+        <div>
+          <star-rating
+            v-model="rating[page]"
+            :glow="5"
+            :increment="0.5"
+            :rounded-corners="true"
+            :star-points="[23,2, 14,17, 0,19, 10,34, 7,50, 23,43, 38,50, 36,34, 46,19, 31,17]"
+            :show-rating="false"
+          ></star-rating>
+        </div>
+
+        <b-btn variant="primary" @click="move(page--)"><</b-btn>
+
+        {{page+1}}
+        <b-btn variant="primary" @click="move(page++)">></b-btn>
+
         <b-btn variant="primary" @click="submit()">Submit</b-btn>
       </form>
     </div>
@@ -54,7 +49,6 @@ export default {
     async rate() {},
     async loadinfo() {
       this.selected = this.$session.get("movies");
-      console.log(this.selected[0].movie.title);
     },
     move() {
       if (this.page <= -1) {
@@ -66,9 +60,9 @@ export default {
     submit() {
       var length = 0;
       this.rating.forEach(element => {
-          length++;
+        length++;
       });
-      
+
       if (length == 10) {
         for (let i = 0; i < this.selected.length; i++) {
           this.selected[i].scale = this.rating[i];
