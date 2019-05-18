@@ -1,18 +1,18 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import scale from '@/components/scale'
-import compare from '@/components/compare'
-import main from '@/components/main'
-import result from '@/components/result'
-import end from '@/components/end'
-import select from "@/components/select";
+import scale from '@/pages/scale'
+import compare from '@/pages/compare'
+import main from '@/pages/main'
+import result from '@/pages/result'
+import end from '@/pages/end'
+import select from "@/pages/select";
 Vue.use(VueRouter)
 
 export default new VueRouter({
   mode: 'history',
   routes: [{
     name: "Main",
-    path: '/0',
+    path: '/',
     component: main
   }, {
     name: "Select",
