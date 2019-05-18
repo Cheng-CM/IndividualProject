@@ -6,7 +6,7 @@
       </div>
       <div class="row">
         <ul>
-          <b-button class="mb-4" variant="primary" to="rRating">Start</b-button>
+          <b-button class="mb-4" variant="primary" to="1">Start</b-button>
         </ul>
       </div>
     </div>
@@ -35,7 +35,6 @@ export default {
           }
           this.$session.set("userId", userId);
         }
-        this.$session.set("ratecount", 0);
       }
     }
   },

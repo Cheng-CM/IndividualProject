@@ -20,10 +20,9 @@
           ></star-rating>
         </div>
 
-        <b-btn variant="primary" @click="move(page--)"><</b-btn>
-
+        <b-btn variant="primary" @click="move(page--)">Previous</b-btn>
         {{page+1}}
-        <b-btn variant="primary" @click="move(page++)">></b-btn>
+        <b-btn variant="primary" @click="move(page++)">Next</b-btn>
 
         <b-btn variant="primary" @click="submit()">Submit</b-btn>
       </form>
@@ -32,7 +31,6 @@
 </template>
 
 <script>
-import MovieAPI from "@/api/movie.js";
 export default {
   name: "scale",
   metaInfo: {
@@ -42,7 +40,8 @@ export default {
     return {
       rating: [],
       selected: [],
-      page: 0
+      page: 0,
+      message: ''
     };
   },
   methods: {
@@ -60,6 +59,7 @@ export default {
     submit() {
       var length = 0;
       this.rating.forEach(element => {
+        element;
         length++;
       });
 
@@ -69,11 +69,12 @@ export default {
         }
         this.$session.set("movies", this.selected);
         this.$router.push("/3");
+      }else{
+        this.message = "Rating not completed. Please rate all the movies."
       }
     }
   },
   mounted() {
-    console.log(this.$session.get("movies"));
     if (this.$session.get("movies")) {
       this.loadinfo();
     } else {

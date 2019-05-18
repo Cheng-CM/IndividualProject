@@ -1,19 +1,26 @@
 <template>
-  <div class="container">
+  <div>
     <h3>Movie Info</h3>
-    <div class="container">
-      <form>
-        <draggable v-model="movies" @start="drag=true" @end="drag=false">
-          <div v-for="(item) in movies" :key="item.id">
-            <div>{{item.title}}</div>
+    <div>
+      <draggable class="col" group="movies" v-bind="dragOptions">
+        <transition-group tag="div">
+          <div v-for="(element) in selected" :key="element.movie.movieId">
+            <div>{{ element.movie.title }}</div>
             <img
-              v-if="img[item.movieId]"
-              v-bind:src="'https://image.tmdb.org/t/p/w185/' + img[item.movieId]"
+              v-if="element.poster"
+              v-bind:src="'https://image.tmdb.org/t/p/w92/' + element.poster"
             >
           </div>
-        </draggable>
-        <b-btn variant="primary" @click="rate()">Rate</b-btn>
-      </form>
+        </transition-group>
+      </draggable>
+      <!-- <draggable class="col" :list="compare" group="movies" v-bind="dragOptions">
+        <transition-group tag="div">
+          <div v-for="index in 45" :key="index">
+            <div>{{index}}</div>
+          </div>
+        </transition-group>
+      </draggable>-->
+      <button class="btn btn-secondary" @click="submit">Submit</button>
     </div>
   </div>
 </template>
@@ -29,51 +36,70 @@ export default {
   metaInfo: {
     title: "Item Page"
   },
+  computed: {
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "description",
+        disabled: false,
+        ghostClass: "ghost"
+      };
+    }
+  },
   data() {
     return {
-      el: "#movieList",
-      data: {
-        movies: []
-      },
-      movies: [],
-      img: []
+      selected: [],
+      compare: [],
+      sliders: {
+        slider2: [150, 400]
+      }
     };
   },
   methods: {
-    rate() {
-      var rating = [5,4.5,4,3.5,3.25,2.75,2.5,2,1.5,1];
-      for (let i = 0; i < this.movies.length; i++) {
-        const movie = this.movies[i];
-        const params = {
-          userId: this.$session.get("userId"),
-          movieId: movie.movieId,
-          rating: rating[i],
+    async submit() {
+      var userId = this.$session.get("userId");
+      var rating = [5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5];
+      for (let i = 0; i < this.selected.length; i++) {
+        this.selected[i].compare = rating[i];
+      }
+      this.$session.set("movies", this.selected);
+
+      for (let i = 0; i < this.selected.length; i++) {
+        const movie = this.selected[i];
+
+        const compareParams = {
+          userId: userId,
+          movieId: movie.movie.movieId,
+          rating: movie.compare,
           timestamp: new Date().getTime()
         };
-        MovieAPI.postcRate(params);
+
+        await MovieAPI.postcRate(compareParams);
+
+        const scaleParams = {
+          userId: userId,
+          movieId: movie.movie.movieId,
+          rating: movie.scale,
+          timestamp: new Date().getTime()
+        };
+        await MovieAPI.postsRate(scaleParams);
       }
-      this.$router.push("/result");
+
+      this.$router.push("/4");
     },
-    async getMovies() {
-      const movieIds = this.$session.get("movieIds");
-      const movieIdsList = movieIds.split(",");
-      var moviesArray = [];
-      for (let i = 0; i < movieIdsList.length; i++) {
-        const element = movieIdsList[i];
-        const linkres = await MovieAPI.getLink(element);
-        var tmdbId = linkres.data.tmdbId;
-        const Imageres = await MovieAPI.getMovieImage(tmdbId);
-        if (Imageres.data.posters[0] != null) {
-          this.img[element] = Imageres.data.posters[0].file_path;
-        }
-        const res = await MovieAPI.getMovie(element);
-        moviesArray[i] = res.data;
-      }
-      this.movies = moviesArray;
+    loadinfo() {
+      this.selected = this.$session.get("movies");
     }
   },
   mounted() {
-    this.getMovies();
+    if (!this.$session.has("userId")) {
+      this.$router.push("/0");
+    }
+    if (this.$session.get("movies")) {
+      this.loadinfo();
+    } else {
+      this.$router.push("/1");
+    }
   }
 };
 </script>
@@ -93,5 +119,18 @@ li {
 }
 a {
   color: #42b983;
+}
+.list-group {
+  min-height: 20px;
+}
+.list-group-item {
+  cursor: move;
+}
+.list-group-item i {
+  cursor: pointer;
+}
+.ghost {
+  opacity: 0.5;
+  background: #c8ebfb;
 }
 </style>

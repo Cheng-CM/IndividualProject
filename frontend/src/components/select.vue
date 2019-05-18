@@ -115,10 +115,10 @@ export default {
     submit() {
       if (this.selected.length >= 10) {
         this.$session.set("movies", this.selected);
-        console.log(this.$session.get("movies"));
+        // console.log(this.$session.get("movies"));
         this.$router.push("/2")
       } else {
-        console.log("Not Enough");
+        alert("Not Enough Movies.")
       }
     }
   },
