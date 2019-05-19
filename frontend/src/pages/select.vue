@@ -1,78 +1,53 @@
 <template>
   <div>
-    <md-card class="container">
-      <div class="container">
+    <div class="container">
+      <div class="col">
         <h3 class="row">Movies</h3>
-        <button class="btn btn-secondary" @click="get10NewMovies">
+        <button class="btn btn-secondary row" @click="get10NewMovies">
           <font-awesome-icon icon="sync-alt"/>
         </button>
       </div>
       <draggable :list="movies" group="movies" v-bind="dragOptions" @change="pushMovie">
         <transition-group tag="div" class="grid" name="grid">
           <div class="md-layout-item" v-for="(element) in movies" :key="element.movie.movieId">
-            <!-- <md-tooltip md-direction="top">on top</md-tooltip> -->
-            <md-card class="md-card">
-
-              <md-card-media-cover md-text-scrim>
-                <md-card-media >
-                  <img class="img" v-bind:src="'https://image.tmdb.org/t/p/w154/' + element.poster">
-                </md-card-media>
-
-                <md-card-area>
-                  <md-card-header>
-                    <span class="card-title">{{ element.movie.title }}</span>
-                  </md-card-header>
-                </md-card-area>
-              </md-card-media-cover>
-
-             
-              <md-card-content>
-                
-              </md-card-content>
-            </md-card>
+            <card>
+              <div slot="header">
+                <img class="img" v-bind:src="'https://image.tmdb.org/t/p/w154/' + element.poster">
+              </div>
+              <div class="col-xs-12">{{ element.movie.title }}</div>
+            </card>
           </div>
         </transition-group>
       </draggable>
-    </md-card>
+    </div>
 
-    <md-card class="container">
+    <div class="container">
       <h3>Selected</h3>
       <draggable :list="selected" group="movies" v-bind="dragOptions">
         <transition-group tag="div" class="grid" name="grid">
           <div class="md-layout-item" v-for="(element) in selected" :key="element.movie.movieId">
-            <md-card class="md-card">
-              <img class="img" v-bind:src="'https://image.tmdb.org/t/p/w154/' + element.poster">
-              <md-card-content>
-                <div class="card-title">{{ element.movie.title }}</div>
-              </md-card-content>
-            </md-card>
+            <card>
+              <div slot="header">
+                <img class="img" v-bind:src="'https://image.tmdb.org/t/p/w154/' + element.poster">
+              </div>
+              <div class="col-xs-12">{{ element.movie.title }}</div>
+            </card>
           </div>
         </transition-group>
       </draggable>
       <div>
         <button class="btn btn-secondary" v-if="selected.length == 10" @click="submit">Submit</button>
       </div>
-    </md-card>
+    </div>
   </div>
 </template>
 <script>
 import MovieAPI from "@/api/movie.js";
 import draggable from "vuedraggable";
-import {
-  StatsCard,
-  ChartCard,
-  NavTabsCard,
-  NavTabsTable,
-  OrderedTable
-} from "@/components";
+
 export default {
   components: {
-    draggable,
-    StatsCard,
-    ChartCard,
-    NavTabsCard,
-    NavTabsTable,
-    OrderedTable
+    draggable
   },
   name: "Selection",
   metaInfo: {
@@ -163,24 +138,9 @@ export default {
 .no-move {
   transition: transform 0s;
 }
-.md-card {
-    width: 320px;
-    margin: 4px;
-    display: inline-block;
-    vertical-align: top;
-  }
 .ghost {
   opacity: 0.5;
   background: #c8ebfb;
-}
-.list-group {
-  min-height: 20px;
-}
-.list-group-item {
-  cursor: move;
-}
-.list-group-item i {
-  cursor: pointer;
 }
 .grid {
   display: grid;

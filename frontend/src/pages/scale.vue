@@ -1,58 +1,35 @@
 <template>
   <div>
-    <div class="container border rounded w-75">
+    <div>
       <h3>Movie Info</h3>
+      <card class="container" style="width: 20rem;">
+        <h4 slot="header">{{ selected[page].movie.title }}</h4>
+        <div class="col-xs-12">
+          <img
+            v-if=" selected[page].poster"
+            v-bind:src="'https://image.tmdb.org/t/p/w154/' +  selected[page].poster"
+          >
+        </div>
+        <div class="stats col-xs-12">{{ selected[page].movie.genres }}</div>
+        <div>
+          <star-rating
+            v-model="rating[page]"
+            :glow="5"
+            :increment="0.5"
+            :rounded-corners="true"
+            :star-points="[23,2, 14,17, 0,19, 10,34, 7,50, 23,43, 38,50, 36,34, 46,19, 31,17]"
+            :show-rating="false"
+          ></star-rating>
+        </div>
+      </card>
+      <div class="container">
+        <b-btn variant="primary" @click="move(page--)"><</b-btn>
 
-      <md-card>
-        <md-card-header>
-          <md-card-header-text>
-            <div>{{ selected[page].movie.title }}</div>
-            <div class="md-subhead">Big size</div>
-          </md-card-header-text>
-
-          <md-card-media md-big>
-            <img
-              v-if=" selected[page].poster"
-              v-bind:src="'https://image.tmdb.org/t/p/w154/' +  selected[page].poster"
-            >
-          </md-card-media>
-        </md-card-header>
-        <md-card-actions>
-          <div>
-            <div>
-              <b-btn variant="primary" @click="move(page--)">Previous</b-btn>
-              {{page+1}}
-              <b-btn variant="primary" @click="move(page++)">Next</b-btn>
-
-              <b-btn variant="primary" @click="submit()">Submit</b-btn>
-              <div>{{message}}</div>
-            </div>
-          </div>
-        </md-card-actions>
-      </md-card>
-      <div>{{ selected[page].movie.title }}</div>
-      <img
-        v-if=" selected[page].poster"
-        v-bind:src="'https://image.tmdb.org/t/p/w154/' +  selected[page].poster"
-      >
-      <div>
-        <star-rating
-          v-model="rating[page]"
-          :glow="5"
-          :increment="0.5"
-          :rounded-corners="true"
-          :star-points="[23,2, 14,17, 0,19, 10,34, 7,50, 23,43, 38,50, 36,34, 46,19, 31,17]"
-          :show-rating="false"
-        ></star-rating>
+        <b-btn variant="primary" @click="move(page++)">></b-btn>
+        <div>{{page+1}}</div>
       </div>
-      <div>
-        <b-btn variant="primary" @click="move(page--)">Previous</b-btn>
-        {{page+1}}
-        <b-btn variant="primary" @click="move(page++)">Next</b-btn>
-
-        <b-btn variant="primary" @click="submit()">Submit</b-btn>
-        <div>{{message}}</div>
-      </div>
+      <b-btn variant="primary" @click="submit()">Submit</b-btn>
+      <div>{{message}}</div>
     </div>
   </div>
 </template>
@@ -83,6 +60,19 @@ export default {
         this.page = 0;
       }
     },
+    notifyVue(verticalAlign, horizontalAlign) {
+      const notification = {
+        template: `<span>` + this.message + `</span>`
+      };
+      const color = Math.floor(Math.random() * 4 + 1);
+      this.$notify({
+        component: notification,
+        icon: "fa fa-gift",
+        horizontalAlign: horizontalAlign,
+        verticalAlign: verticalAlign,
+        type: this.type[color]
+      });
+    },
     submit() {
       var length = 0;
       this.rating.forEach(element => {
@@ -97,6 +87,7 @@ export default {
         this.$session.set("movies", this.selected);
         this.$router.push("/3");
       } else {
+        this.notifyVue("bottom", "center");
         this.message = "Rating not completed. Please rate all the movies.";
       }
     }
@@ -112,27 +103,32 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
-<style lang="scss" scoped>
-.md-card {
-  width: 320px;
-  margin: 4px;
-  display: inline-block;
-  vertical-align: top;
+<style lang="scss">
+.vue-notifyjs.notifications {
+  .alert {
+    z-index: 100;
+  }
+  .list-move {
+    transition: transform 0.3s, opacity 0.4s;
+  }
+  .list-item {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .list-enter-active {
+    transition: transform 0.2s ease-in, opacity 0.4s ease-in;
+  }
+  .list-leave-active {
+    transition: transform 1s ease-out, opacity 0.4s ease-out;
+  }
+
+  .list-enter {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  .list-leave-to {
+    opacity: 0;
+    transform: scale(1.2, 0.7);
+  }
 }
 </style>

@@ -4,6 +4,11 @@ import router from './router'
 
 import StarRating from 'vue-star-rating'
 
+
+// LightBootstrap plugin
+import LightBootstrap from './light-bootstrap-main'
+Vue.use(LightBootstrap)
+
 // app.js
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -11,9 +16,6 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-import GlobalComponents from "./globalComponents";
-import GlobalDirectives from "./globalDirectives";
-import Notifications from "./components/NotificationPlugin";
 
 import {
   library
@@ -28,7 +30,6 @@ import {
 
 library.add(faSyncAlt);
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-import MaterialDashboard from "./material-dashboard";
 
 import Chartist from "chartist";
 
@@ -41,6 +42,10 @@ import VueWait from 'vue-wait'
 Vue.use(VueWait)
 Vue.component('star-rating', StarRating);
 
+import VueNotify from 'vue-notifyjs'
+import 'vue-notifyjs/themes/default.css'
+Vue.use(VueNotify)
+
 Vue.use(VueAxios, axios);
 
 import BootstrapVue from 'bootstrap-vue'
@@ -48,13 +53,18 @@ Vue.use(BootstrapVue);
 
 Vue.use(router);
 
-Vue.use(MaterialDashboard);
-Vue.use(GlobalComponents);
-Vue.use(GlobalDirectives);
-Vue.use(Notifications);
-
 Vue.component(draggable);
 
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
+
+Vue.component('VueSlider', VueSlider)
+
+Vue.component('jsx-example', {
+  render (h) { // <-- h must be in scope
+    return <div id="foo">bar</div>
+  }
+})
 
 Vue.config.productionTip = false
 

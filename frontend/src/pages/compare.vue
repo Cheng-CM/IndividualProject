@@ -1,11 +1,39 @@
 <template>
-  <div>
+  <div class="container">
     <h3>Movie Info</h3>
-    <div>
+    <div class="row">
+      <div class="col" v-on:click="listRank">
+        <vue-slider
+          v-model="rating"
+          direction="btt"
+          :height="1500"
+          :process="false"
+          :order="false"
+          :dotSize="[20,20]"
+          :max="50"
+          :min="5"
+          :marks="marks"
+          style="display: inline-block; margin: 30px;"
+        >
+          <template #tooltip="{ index }">
+            <div v-if="index === 0">{{selected[index].movie.title}}</div>
+            <div v-else-if="index === 1">{{selected[index].movie.title}}</div>
+            <div v-else-if="index === 2">{{selected[index].movie.title}}</div>
+            <div v-else-if="index === 3">{{selected[index].movie.title}}</div>
+            <div v-else-if="index === 4">{{selected[index].movie.title}}</div>
+            <div v-else-if="index === 5">{{selected[index].movie.title}}</div>
+            <div v-else-if="index === 6">{{selected[index].movie.title}}</div>
+            <div v-else-if="index === 7">{{selected[index].movie.title}}</div>
+            <div v-else-if="index === 8">{{selected[index].movie.title}}</div>
+            <div v-else-if="index === 9">{{selected[index].movie.title}}</div>
+          </template>
+        </vue-slider>
+      </div>
       <draggable class="col" group="movies" v-bind="dragOptions">
         <transition-group tag="div">
-          <div v-for="(element) in selected" :key="element.movie.movieId">
+          <div v-for="(element,index) in listing" :key="element.movie.movieId">
             <div>{{ element.movie.title }}</div>
+             <div>{{ index }}</div>
             <img
               v-if="element.poster"
               v-bind:src="'https://image.tmdb.org/t/p/w92/' + element.poster"
@@ -20,8 +48,8 @@
           </div>
         </transition-group>
       </draggable>-->
-      <button class="btn btn-secondary" @click="submit">Submit</button>
     </div>
+    <button class="btn btn-secondary row" @click="submit">Submit</button>
   </div>
 </template>
 
@@ -50,20 +78,44 @@ export default {
     return {
       selected: [],
       compare: [],
-      sliders: {
-        slider2: [150, 400]
+      rating: [50, 45, 40, 35, 30, 25, 20, 15, 10, 5],
+      listing:[],
+      marks: {
+        "50": {
+          label: "Best 👍",
+          labelStyle: {
+            left: "100%",
+            margin: "0 0 0 10px",
+            top: "50%",
+            transform: "translateY(-50%)"
+          }
+        },
+        "5": {
+          label: "Worst 👎",
+          labelStyle: {
+            left: "100%",
+            margin: "0 0 0 10px",
+            top: "50%",
+            transform: "translateY(-50%)"
+          }
+        }
       }
     };
   },
   methods: {
+    listRank() {
+      console.log("Hey");
+      this.listing = this.listing.sort();
+    },
     async submit() {
+
       var userId = this.$session.get("userId");
-      var rating = [5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5];
+
       for (let i = 0; i < this.selected.length; i++) {
-        this.selected[i].compare = rating[i];
+        this.selected[i].compare = this.rating[i] / 10;
       }
       this.$session.set("movies", this.selected);
-
+      console.log(this.selected);
       for (let i = 0; i < this.selected.length; i++) {
         const movie = this.selected[i];
 
@@ -89,6 +141,7 @@ export default {
     },
     loadinfo() {
       this.selected = this.$session.get("movies");
+      this.listing = this.selected;
     }
   },
   mounted() {

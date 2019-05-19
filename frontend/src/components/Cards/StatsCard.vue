@@ -1,26 +1,32 @@
 <template>
-  <md-card class="md-card-stats">
-    <md-card-header :data-background-color="dataBackgroundColor">
-      <slot name="header"></slot>
-    </md-card-header>
-
-    <md-card-content>
-      <slot name="content"></slot>
-    </md-card-content>
-
-    <md-card-actions md-alignment="left">
+  <card class="card-stats">
+    <div class="row">
+      <div class="col-5" v-if="$slots.header">
+        <div class="icon-big text-center">
+          <slot name="header"></slot>
+        </div>
+      </div>
+      <div class="col-7" v-if="$slots.content">
+        <div class="numbers">
+          <slot name="content"></slot>
+        </div>
+      </div>
+    </div>
+    <div slot="footer" class="stats" v-if="$slots.footer">
       <slot name="footer"></slot>
-    </md-card-actions>
-  </md-card>
+    </div>
+  </card>
 </template>
 <script>
-export default {
-  name: "stats-card",
-  props: {
-    dataBackgroundColor: {
-      type: String,
-      default: ""
+  import Card from './Card.vue'
+  export default {
+    name: 'stats-card',
+    components: {
+      Card
     }
   }
-};
+
 </script>
+<style>
+
+</style>
