@@ -33,7 +33,7 @@
         <transition-group tag="div">
           <div v-for="(element,index) in listing" :key="element.movie.movieId">
             <div>{{ element.movie.title }}</div>
-             <div>{{ index }}</div>
+            <div>{{ index }}</div>
             <img
               v-if="element.poster"
               v-bind:src="'https://image.tmdb.org/t/p/w92/' + element.poster"
@@ -79,7 +79,7 @@ export default {
       selected: [],
       compare: [],
       rating: [50, 45, 40, 35, 30, 25, 20, 15, 10, 5],
-      listing:[],
+      listing: [],
       marks: {
         "50": {
           label: "Best 👍",
@@ -104,12 +104,35 @@ export default {
   },
   methods: {
     listRank() {
-      console.log("Hey");
-      this.listing = this.listing.sort();
+      // var sorted = this.rating;
+      // let toIndex = sorted.length;
+      // while (toIndex > 1) {
+      //   toIndex--;
+      //   for (let i = 0; i < toIndex; i++) {
+      //     if (sorted[i] < sorted[i + 1]) {
+      //       let tempValue = sorted[i];
+      //       let tempMovie = this.listing[i];
+
+      //       sorted[i] = sorted[i + 1];
+      //       this.listing[i] = this.listing[i + 1];
+
+      //       sorted[i + 1] = tempValue;
+      //       this.listing[i + 1] = tempMovie;
+      //     }
+      //   }
+      // }
+      // for (let i = 0; i < sorted.length; i++) {
+      //   const element = sorted;
+      //   this.listing[i].rating = element;
+      //   this.listing[i];
+      // }
+      // this.rating.sort();
+      // console.log(sorted);
+      // console.log(this.listing);
     },
     async submit() {
-
       var userId = this.$session.get("userId");
+      console.log(this.selected);
 
       for (let i = 0; i < this.selected.length; i++) {
         this.selected[i].compare = this.rating[i] / 10;

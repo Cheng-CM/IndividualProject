@@ -77,6 +77,8 @@ export default {
           movie;
         while (poster == null) {
           movie = await this.randomMovie();
+          console.log(movie);
+          
           poster = await this.getPoster(movie.movieId);
         }
         movie = {

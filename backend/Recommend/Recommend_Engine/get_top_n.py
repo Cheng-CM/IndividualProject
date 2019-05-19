@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 import pandas as pd
-from surprise import SVD, Dataset, Reader, dump,KNNBaseline,KNNBasic,SVDpp
+from surprise import SVD, Dataset, Reader, dump, KNNBaseline, KNNBasic, SVDpp, accuracy
 from surprise.model_selection import cross_validate
 import backend.Recommend.Recommend_Engine.pandasMongo as pdmo
 import datetime
@@ -35,6 +35,40 @@ def get_top_n(predictions, n=10):
     return top_n
 
 
+def precision_recall_at_k(predictions, k=10, threshold=3.5):
+    '''Return precision and recall at k metrics for each user.'''
+
+    # First map the predictions to each user.
+    user_est_true = defaultdict(list)
+    for uid, _, true_r, est, _ in predictions:
+        user_est_true[uid].append((est, true_r))
+
+    precisions = dict()
+    recalls = dict()
+    for uid, user_ratings in user_est_true.items():
+
+        # Sort user ratings by estimated value
+        user_ratings.sort(key=lambda x: x[0], reverse=True)
+
+        # Number of relevant items
+        n_rel = sum((true_r >= threshold) for (_, true_r) in user_ratings)
+
+        # Number of recommended items in top k
+        n_rec_k = sum((est >= threshold) for (est, _) in user_ratings[:k])
+
+        # Number of relevant and recommended items in top k
+        n_rel_and_rec_k = sum(((true_r >= threshold) and (est >= threshold))
+                              for (est, true_r) in user_ratings[:k])
+
+        # Precision@K: Proportion of recommended items that are relevant
+        precisions[uid] = n_rel_and_rec_k / n_rec_k if n_rec_k != 0 else 1
+
+        # Recall@K: Proportion of relevant items that are recommended
+        recalls[uid] = n_rel_and_rec_k / n_rel if n_rel != 0 else 1
+
+    return precisions, recalls
+
+
 def getRecommendResult(modelId, UserId):
     # movielensModel = pdmo.read_mongo('movielens', 'ratings')
     if modelId == 0:
@@ -65,24 +99,43 @@ def getRecommendResult(modelId, UserId):
         modelName = "Scale"
     else:
         modelName = "Compare"
-        
-    RMSE = cross_validate(algo, data, measures=['RMSE'], cv=5, verbose=True)
+
+    RMSE = cross_validate(algo, data, measures=[
+                          'RMSE', 'MAE'], cv=5, verbose=True)
 
     RSMEArray = RMSE['test_rmse'].tolist()
+    MAEArray = RMSE['test_mae'].tolist()
 
-    validationResult = {"Method": modelName,
-                        "RMSE": RSMEArray,
-                        "RMSE_Mean": np.mean(RMSE['test_rmse']),
-                        "date": datetime.datetime.utcnow()}
-
-    pdmo.insert_mongo('movielens', 'RMSE', validationResult)
-
+    testset = trainset.build_testset()
+    testpredictions = algo.test(testset)
+    accuRMSE = accuracy.rmse(testpredictions, verbose=True)
     # Than predict ratings for all pairs (u, i) that are NOT in the training set.
     # predictions = loaded_algo.test(trainset.build_anti_testset())
 
     predictions = algo.test(trainset.build_anti_testset())
-    top_n = get_top_n(predictions, n=10)
+    precisions, recalls = precision_recall_at_k(predictions, k=5, threshold=4)
 
+    # Precision and recall can then be averaged over all users
+    print(sum(prec for prec in precisions.values()) / len(precisions))
+    print(sum(rec for rec in recalls.values()) / len(recalls))
+    print("Precisions: ", precisions, " Recalls", recalls)
+
+   
+
+    validationResult = {"Method": modelName,
+                        "RMSE": RSMEArray,
+                        "RMSEMean": np.mean(RMSE['test_rmse']),
+                        "RMSETestsetAccuracy": accuRMSE,
+                        "MAE": MAEArray,
+                        "MAEMean": np.mean(RMSE['test_mae']),
+                        "date": datetime.datetime.utcnow(),
+                        "sumOfPrecisions": sum(prec for prec in precisions.values()) / len(precisions),
+                        "sumOfRecalls": sum(rec for rec in recalls.values()) / len(recalls)
+                        }
+
+    pdmo.insert_mongo('movielens', 'regressionResult', validationResult)
+
+    top_n = get_top_n(predictions, n=10)
     # Print the recommended items for each user
     # for uid, user_ratings in top_n.items():
     #     print(uid, [iid for (iid, _) in user_ratings])
