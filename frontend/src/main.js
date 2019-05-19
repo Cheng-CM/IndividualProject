@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
+
 import StarRating from 'vue-star-rating'
+
 // app.js
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -19,20 +21,18 @@ import {
 import {
   faSyncAlt
 } from '@fortawesome/free-solid-svg-icons'
-import {
-  faGooglePlus
-} from '@fortawesome/free-brands-svg-icons'
+
 import {
   FontAwesomeIcon
 } from '@fortawesome/vue-fontawesome'
 
-library.add(faSyncAlt, faGooglePlus);
+library.add(faSyncAlt);
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 import MaterialDashboard from "./material-dashboard";
 
 import Chartist from "chartist";
 
-import BootstrapVue from 'bootstrap-vue'
+
 import VueSession from 'vue-session'
 import draggable from 'vuedraggable'
 Vue.use(VueSession)
@@ -42,7 +42,10 @@ Vue.use(VueWait)
 Vue.component('star-rating', StarRating);
 
 Vue.use(VueAxios, axios);
+
+import BootstrapVue from 'bootstrap-vue'
 Vue.use(BootstrapVue);
+
 Vue.use(router);
 
 Vue.use(MaterialDashboard);

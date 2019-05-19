@@ -4,11 +4,7 @@
       <div class="row">
         <ul>Experiment for movie recommendation system in item comparsion and scale rating</ul>
       </div>
-      <div class="row">
-        <ul>
-          <b-button class="mb-4" variant="primary" to="1">Start</b-button>
-        </ul>
-      </div>
+      <b-btn variant="primary" @click="next">Start</b-btn>
     </div>
   </div>
 </template>
@@ -23,6 +19,9 @@ export default {
   },
   components: {},
   methods: {
+    next(){
+      this.$router.push("1");
+    },
     async loadId() {
       var userId = 1000;
       const res = await MovieAPI.getgtUserid();
@@ -44,13 +43,19 @@ export default {
 };
 </script>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
 }
 </style>
