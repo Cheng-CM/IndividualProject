@@ -52,9 +52,15 @@ def postResult(request):
     return HttpResponse("Successful")
 
 
+def getAccuracy(request):
+    result = pandasMongo.read_mongo_as_JSON('movielens', 'regressionResult')
+    return HttpResponse(result)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('backend.Recommend.urls')),
     path('recommend/', getRRes),
-    path('result', postResult)
+    path('result', postResult),
+    path('getAccuracy', getAccuracy)
 ]

@@ -6,6 +6,7 @@ import main from '@/pages/main'
 import result from '@/pages/result'
 import end from '@/pages/end'
 import select from "@/pages/select";
+import regression from "@/pages/regression"
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -34,5 +35,9 @@ export default new VueRouter({
     name: "End",
     path: '/5',
     component: end
+  }, {
+    name: "regression",
+    path: '/result',
+    component: regression
   }]
 })

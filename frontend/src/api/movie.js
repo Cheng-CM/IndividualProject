@@ -27,6 +27,9 @@ class MovieAPI {
     postResult(params) {
         return Vue.prototype.axios.post("http://localhost:8000/result", params);
     }
+    getAccuracy() {
+        return Vue.prototype.axios.get("http://localhost:8000/getAccuracy");
+    }
 
 
 }
