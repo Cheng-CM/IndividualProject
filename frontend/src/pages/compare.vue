@@ -2,18 +2,29 @@
   <div class="container">
     <h3>Movie Info</h3>
     <div class="row">
-      <div class="col" v-on:click="listRank">
+      <div class="col">
+        <draggable :list="selected" group="movies" v-bind="dragOptions">
+          <transition-group tag="div" class="grid" name="grid">
+            <div class="md-layout-item" v-for="(element) in selected" :key="element.movie.movieId">
+              <card>
+                <div slot="header">
+                  <img class="img" v-bind:src="'https://image.tmdb.org/t/p/w92/' + element.poster">
+                </div>
+                <div class="col-xs-12">{{ element.movie.title }}</div>
+              </card>
+            </div>
+          </transition-group>
+        </draggable>
+      </div>
+      <div class="col">
         <vue-slider
           v-model="rating"
-          direction="btt"
-          :height="1500"
           :process="false"
           :order="false"
           :dotSize="[20,20]"
           :max="50"
           :min="5"
           :marks="marks"
-          style="display: inline-block; margin: 30px;"
         >
           <template #tooltip="{ index }">
             <div v-if="index === 0">{{selected[index].movie.title}}</div>
@@ -29,18 +40,6 @@
           </template>
         </vue-slider>
       </div>
-      <draggable class="col" group="movies" v-bind="dragOptions">
-        <transition-group tag="div">
-          <div v-for="(element,index) in listing" :key="element.movie.movieId">
-            <div>{{ element.movie.title }}</div>
-            <div>{{ index }}</div>
-            <img
-              v-if="element.poster"
-              v-bind:src="'https://image.tmdb.org/t/p/w92/' + element.poster"
-            >
-          </div>
-        </transition-group>
-      </draggable>
       <!-- <draggable class="col" :list="compare" group="movies" v-bind="dragOptions">
         <transition-group tag="div">
           <div v-for="index in 45" :key="index">
@@ -103,33 +102,7 @@ export default {
     };
   },
   methods: {
-    listRank() {
-      // var sorted = this.rating;
-      // let toIndex = sorted.length;
-      // while (toIndex > 1) {
-      //   toIndex--;
-      //   for (let i = 0; i < toIndex; i++) {
-      //     if (sorted[i] < sorted[i + 1]) {
-      //       let tempValue = sorted[i];
-      //       let tempMovie = this.listing[i];
-
-      //       sorted[i] = sorted[i + 1];
-      //       this.listing[i] = this.listing[i + 1];
-
-      //       sorted[i + 1] = tempValue;
-      //       this.listing[i + 1] = tempMovie;
-      //     }
-      //   }
-      // }
-      // for (let i = 0; i < sorted.length; i++) {
-      //   const element = sorted;
-      //   this.listing[i].rating = element;
-      //   this.listing[i];
-      // }
-      // this.rating.sort();
-      // console.log(sorted);
-      // console.log(this.listing);
-    },
+    list() {},
     async submit() {
       var userId = this.$session.get("userId");
       console.log(this.selected);
@@ -164,7 +137,6 @@ export default {
     },
     loadinfo() {
       this.selected = this.$session.get("movies");
-      this.listing = this.selected;
     }
   },
   mounted() {
