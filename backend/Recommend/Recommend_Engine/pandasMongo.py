@@ -46,8 +46,15 @@ def insert_mongo(db, collection, query={}, host='localhost', port=27017, usernam
     # Make a query to the specific DB and Collection
     db[collection].insert_one(query)
 
-
 def read_mongo_as_JSON(db, collection, query={}, host='localhost', port=27017, username=None, password=None, no_id=True):
+        # Connect to MongoDB
+    db = _connect_mongo(host=host, port=port,
+                        username=username, password=password, db=db)
+    # Make a query to the specific DB and Collection
+    data = dumps(db[collection].find(query))
+    return data
+
+def search(db, collection, string, host='localhost', port=27017, username=None, password=None, no_id=True):
     """ Read from Mongo and Store into DataFrame """
 
     # Connect to MongoDB
@@ -55,7 +62,6 @@ def read_mongo_as_JSON(db, collection, query={}, host='localhost', port=27017, u
                         username=username, password=password, db=db)
 
     # Make a query to the specific DB and Collection
-
-    data = dumps(db[collection].find(query))
-
+    db[collection].create_index([('title', 'text')])
+    data = dumps(db[collection].find({"$text": {"$search": string}}).limit(10))
     return data

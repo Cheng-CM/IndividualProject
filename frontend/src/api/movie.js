@@ -30,6 +30,9 @@ class MovieAPI {
     getAccuracy() {
         return Vue.prototype.axios.get("http://localhost:8000/getAccuracy");
     }
+    search(params) {
+        return Vue.prototype.axios.get("http://localhost:8000/search/?name=" + params);
+    }
 
 
 }

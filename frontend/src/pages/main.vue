@@ -1,10 +1,14 @@
- <template>
+ <template >
   <div id="app">
     <div class="container">
+      <div class="col ">
       <div class="row">
-        <ul>Experiment for movie recommendation system in item comparsion and scale rating</ul>
+        Experiment for movie recommendation system in item comparsion and scale rating
       </div>
-      <b-btn variant="primary" @click="next">Start</b-btn>
+      <div class="row">
+         <b-btn variant="primary" @click="next">Start</b-btn>
+      </div>
+      </div>
     </div>
   </div>
 </template>

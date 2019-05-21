@@ -57,10 +57,19 @@ def getAccuracy(request):
     return HttpResponse(result)
 
 
+def getSearch(request):
+    search_text = request.GET.get('name', '')
+    search_text =  '\"' + search_text + '\"'
+    result = pandasMongo.search(
+        'movielens', 'movies', search_text)
+    return HttpResponse(result)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('backend.Recommend.urls')),
     path('recommend/', getRRes),
     path('result', postResult),
-    path('getAccuracy', getAccuracy)
+    path('getAccuracy', getAccuracy),
+    path('search/', getSearch)
 ]

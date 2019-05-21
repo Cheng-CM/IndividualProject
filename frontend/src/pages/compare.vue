@@ -1,5 +1,5 @@
-<template>
-  <div class="container">
+<template >
+  <div class="container" >
     <h3>Movie Info</h3>
     <div class="row">
       <div class="col">

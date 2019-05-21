@@ -3,16 +3,27 @@
     <div class="container">
       <div class="col">
         <h3 class="row">Movies</h3>
-        <button class="btn btn-secondary row" @click="get10NewMovies">
-          <font-awesome-icon icon="sync-alt"/>
-        </button>
+        <!-- <div class="col"> -->
+
+        <div class="row">
+          <fg-input class="col-md-4" placeholder="Search..." v-model="search"></fg-input>
+          <button class="btn btn-primary md-4" @click="searchMovie">
+            <font-awesome-icon icon="search"/>
+          </button>
+
+          <button class="btn btn-secondary md-4" @click="get10NewMovies">
+            <font-awesome-icon icon="sync-alt"/>
+          </button>
+        </div>
+
+        <!-- </div> -->
       </div>
       <draggable :list="movies" group="movies" v-bind="dragOptions" @change="pushMovie">
         <transition-group tag="div" class="grid" name="grid">
           <div class="md-layout-item" v-for="(element) in movies" :key="element.movie.movieId">
             <card>
               <div slot="header">
-                <img class="img" v-bind:src="'https://image.tmdb.org/t/p/w154/' + element.poster">
+                <img class="img" v-if="element.poster" v-bind:src="'https://image.tmdb.org/t/p/w154/' + element.poster">
               </div>
               <div class="col-xs-12">{{ element.movie.title }}</div>
             </card>
@@ -28,7 +39,7 @@
           <div class="md-layout-item" v-for="(element) in selected" :key="element.movie.movieId">
             <card>
               <div slot="header">
-                <img class="img" v-bind:src="'https://image.tmdb.org/t/p/w154/' + element.poster">
+                <img class="img" v-if="element.poster" v-bind:src="'https://image.tmdb.org/t/p/w154/' + element.poster">
               </div>
               <div class="col-xs-12">{{ element.movie.title }}</div>
             </card>
@@ -42,12 +53,14 @@
   </div>
 </template>
 <script>
+import fgInput from "@/components/Inputs/BaseInput.vue";
 import MovieAPI from "@/api/movie.js";
 import draggable from "vuedraggable";
 
 export default {
   components: {
-    draggable
+    draggable,
+    fgInput
   },
   name: "Selection",
   metaInfo: {
@@ -56,7 +69,8 @@ export default {
   data() {
     return {
       movies: [],
-      selected: []
+      selected: [],
+      search: ""
     };
   },
   computed: {
@@ -78,7 +92,7 @@ export default {
         while (poster == null) {
           movie = await this.randomMovie();
           console.log(movie);
-          
+
           poster = await this.getPoster(movie.movieId);
         }
         movie = {
@@ -88,8 +102,24 @@ export default {
         this.$set(this.movies, i, movie);
       }
     },
+    async searchMovie() {
+      this.movies = [];
+      var movies = await MovieAPI.search(this.search);
+      for (let i = 0; i < movies.data.length; i++) {
+        var movie,poster = null;
+          movie = movies.data[i];
+          console.log(movie);
+          poster = await this.getPoster(movie.movieId);
+
+        movie = {
+          movie,
+          poster
+        };
+        this.$set(this.movies, i, movie);
+      }
+    },
     async pushMovie() {
-      if (this.movies.length < 10) {
+      while (this.movies.length < 10) {
         var poster = null,
           movie;
         while (poster == null) {
@@ -147,7 +177,7 @@ export default {
 .grid {
   display: grid;
   grid-template-columns: repeat(5, 215px);
-  grid-template-rows: repeat(2, 430px);
+  grid-template-rows: repeat(2, 350px);
   grid-gap: 0.2em;
 }
 .cell {

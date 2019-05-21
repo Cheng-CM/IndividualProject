@@ -23,12 +23,15 @@ import {
 import {
   faSyncAlt
 } from '@fortawesome/free-solid-svg-icons'
+import {
+  faSearch
+} from '@fortawesome/free-solid-svg-icons'
 
 import {
   FontAwesomeIcon
 } from '@fortawesome/vue-fontawesome'
 
-library.add(faSyncAlt);
+library.add(faSyncAlt, faSearch);
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 import Chartist from "chartist";
@@ -58,15 +61,12 @@ Vue.component(draggable);
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
 
-Vue.component('VueSlider', VueSlider)
+import VueParticles from 'vue-particles'
+Vue.use(VueParticles)
 
-Vue.component('jsx-example', {
-  render (h) { // <-- h must be in scope
-    return <div id="foo">bar</div>
-  }
-})
+Vue.component('VueSlider', VueSlider);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
   render: h => h(App),

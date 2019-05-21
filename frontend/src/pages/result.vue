@@ -87,12 +87,14 @@ export default {
           content: res
         };
         var message = await MovieAPI.postResult(params);
+        this.$session.set("result", "compare");
       } else {
         const params = {
           result: "Scale",
           content: res
         };
         var message = await MovieAPI.postResult(params);
+        this.$session.set("result", "scale");
       }
       this.$router.push("/5");
     }
