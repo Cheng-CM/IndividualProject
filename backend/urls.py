@@ -17,15 +17,15 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponse
-from .Recommend.Recommend_Engine import get_top_n, pandasMongo
+from .Recommend.Recommend_Engine import get_top_n, pandasMongo,movielens
 import json
 
 
 def getRRes(request):
     userId = request.GET.get('id', '')
     if userId != '':
-        s_top_n = get_top_n.getRecommendResult(0, userId)
-        c_top_n = get_top_n.getRecommendResult(1, userId)
+        s_top_n = get_top_n.getRecommendResult(0, userId, 0)
+        c_top_n = get_top_n.getRecommendResult(1, userId, 0)
         data = {
             "Scale": s_top_n,
             "Compare": c_top_n
@@ -59,10 +59,20 @@ def getAccuracy(request):
 
 def getSearch(request):
     search_text = request.GET.get('name', '')
-    search_text =  '\"' + search_text + '\"'
+    search_text = '\"' + search_text + '\"'
     result = pandasMongo.search(
         'movielens', 'movies', search_text)
     return HttpResponse(result)
+
+def getMovielensResult(request):
+    method = request.GET.get('method', 0)
+    print(method)
+    if method != '':
+        data = movielens.getRecommendResult(method)
+        json_data = json.dumps(data)
+        return HttpResponse(json_data)
+    else:
+        return HttpResponse("Error")
 
 
 urlpatterns = [
@@ -71,5 +81,7 @@ urlpatterns = [
     path('recommend/', getRRes),
     path('result', postResult),
     path('getAccuracy', getAccuracy),
-    path('search/', getSearch)
+    path('search/', getSearch),
+    path("getMovielensResult/", getMovielensResult)
+
 ]

@@ -69,14 +69,16 @@ def precision_recall_at_k(predictions, k=10, threshold=3.5):
     return precisions, recalls
 
 
-def getRecommendResult(modelId, UserId):
-    # movielensModel = pdmo.read_mongo('movielens', 'ratings')
+def getRecommendResult(modelId, UserId, check):
+
     if modelId == 0:
         Model = pdmo.read_mongo('movielens', 'scale_ratings')
     else:
         Model = pdmo.read_mongo('movielens', 'compare_ratings')
     # Command this to load faster/ Way more accurate
-    # Model = Model.append(movielensModel)
+    if check == 1:
+        movielensModel = pdmo.read_mongo('movielens', 'ratings')
+        Model = Model.append(movielensModel)
 
     # reader used by surprise
     reader = Reader(rating_scale=(0.5, 5))
@@ -119,8 +121,6 @@ def getRecommendResult(modelId, UserId):
     print(sum(prec for prec in precisions.values()) / len(precisions))
     print(sum(rec for rec in recalls.values()) / len(recalls))
     print("Precisions: ", precisions, " Recalls", recalls)
-
-   
 
     validationResult = {"Method": modelName,
                         "RMSE": RSMEArray,
