@@ -201,7 +201,7 @@ export default {
       var comapareMAESeries = [];
       for (let i = 0; i < res.data.length; i++) {
         const method = res.data[i].Method;
-        if (res.data[i].Method == "Scale") {
+        if (method == "Scale") {
           scaleRSMESeries.push(Math.round(res.data[i].RMSEMean * 100) / 100);
           scaleMAESeries.push(Math.round(res.data[i].MAEMean * 100) / 100);
           this.ResultChart.data.labels.push(i / 2 + 1);
