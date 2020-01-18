@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"movielens.movies"},{"v":2,"key":{"_fts":"text","_ftsx":1},"name":"title_text","ns":"movielens.movies","weights":{"title":1},"default_language":"english","language_override":"language","textIndexVersion":3}],"uuid":"903f0c0b4439485f95cb3cb95eeed765"}
