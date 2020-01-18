@@ -118,12 +118,12 @@
 <script>
 import ChartCard from "../components/Cards/ChartCard.vue";
 import StatsCard from "../components/Cards/StatsCard.vue";
-// import LTable from "../components/Table.vue";
+import LTable from "../components/Table.vue";
 import MovieAPI from "@/api/movie.js";
 
 export default {
   components: {
-    // LTable,
+    LTable,
     ChartCard,
     StatsCard
   },
@@ -194,6 +194,7 @@ export default {
   methods: {
     async loadInfo() {
       var res = await MovieAPI.getAccuracy();
+      //   console.log(res.data);
       var scaleRSMESeries = [];
       var compareRSMESeries = [];
       var scaleMAESeries = [];
