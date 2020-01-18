@@ -23,9 +23,9 @@
         </div>
       </card>
       <div class="container">
-        <b-btn variant="primary" @click="move(page--)"><</b-btn>
+        <b-btn variant="primary" @click="move(page--)">&#60;</b-btn>
 
-        <b-btn variant="primary" @click="move(page++)">></b-btn>
+        <b-btn variant="primary" @click="move(page++)">&#62;</b-btn>
         <div>{{page+1}}</div>
       </div>
       <b-btn variant="primary" @click="submit()">Submit</b-btn>
