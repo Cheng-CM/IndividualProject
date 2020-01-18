@@ -42,7 +42,7 @@
               <p class="card-category">Sum of 5-Star Scale</p>
               <h4
                 class="card-title"
-              >{{" Precision:" + Math.round(pnR[0][0] * 100) / 100 +", Recall:" + Math.round(pnR[0][1] * 100) / 100}}</h4>
+              >{{" Precision:" + Math.round(pnR[0][0] * 10) / 10 +", Recall:" + Math.round(pnR[0][1] * 10) / 10}}</h4>
             </div>
             <div slot="footer">
               <i class="fa fa-clock-o"></i>
@@ -59,7 +59,7 @@
               <p class="card-category">Sum of Item Comparison</p>
               <h4
                 class="card-title"
-              >{{" Precision:" + Math.round(pnR[1][0] * 100) / 100 +", Recall:" + Math.round(pnR[1][1] * 100) / 100}}</h4>
+              >{{" Precision:" + Math.round(pnR[1][0] * 10) / 10 +", Recall:" + Math.round(pnR[1][1] * 10) / 10}}</h4>
             </div>
             <div slot="footer">
               <i class="fa fa-refresh"></i>
