@@ -1,11 +1,13 @@
+import datetime
 from collections import defaultdict
 
-import pandas as pd
-from surprise import SVD, Dataset, Reader, dump, KNNBaseline, KNNBasic, SVDpp, accuracy
-from surprise.model_selection import cross_validate
-import backend.Recommend.Recommend_Engine.pandasMongo as pdmo
-import datetime
 import numpy as np
+import pandas as pd
+from surprise import (SVD, Dataset, KNNBaseline, KNNBasic, Reader, SVDpp,
+                      accuracy, dump)
+from surprise.model_selection import cross_validate
+
+import backend.Recommend.Recommend_Engine.pandasMongo as pdmo
 
 
 def get_top_n(predictions, n=10):
@@ -33,7 +35,6 @@ def get_top_n(predictions, n=10):
         top_n[uid] = user_ratings[:n]
 
     return top_n
-
 
 def precision_recall_at_k(predictions, k=10, threshold=3.5):
     '''Return precision and recall at k metrics for each user.'''
@@ -68,75 +69,43 @@ def precision_recall_at_k(predictions, k=10, threshold=3.5):
 
     return precisions, recalls
 
-
-def getRecommendResult(modelId, UserId, check):
-
+def getRecommendResult(modelId):
     if modelId == 0:
         Model = pdmo.read_mongo('movielens', 'scale_ratings')
     else:
         Model = pdmo.read_mongo('movielens', 'compare_ratings')
     # Command this to load faster/ Way more accurate
-    if check == 1:
-        movielensModel = pdmo.read_mongo('movielens', 'ratings')
-        Model = Model.append(movielensModel)
+    movielensModel = pdmo.read_mongo('movielens', 'ratings')
+    Model = Model.append(movielensModel)
 
     # reader used by surprise
     reader = Reader(rating_scale=(0.5, 5))
 
     data = Dataset.load_from_df(
         Model[["userId", "movieId", "rating"]], reader)
-
+    print("Building trainset...")
     trainset = data.build_full_trainset()
 
     # First train an SVD algorithm on the movielens dataset.
-    algo = SVDpp()
+    algo = SVD()
+    print("Train algorithm...")
     algo.fit(trainset)
-
-    # # Load dumped algorithm.
-    # file_name = ('./data/ml-latest-small/ml-latest-small_testset')
-    # _, loaded_algo = dump.load(file_name)
 
     # Run 5-fold cross-validation and print results
     if modelId == 0:
         modelName = "Scale"
     else:
         modelName = "Compare"
-
+    print("Cross vaildate...")
     RMSE = cross_validate(algo, data, measures=[
                           'RMSE', 'MAE'], cv=5, verbose=True)
 
-    RSMEArray = RMSE['test_rmse'].tolist()
-    MAEArray = RMSE['test_mae'].tolist()
-
+    print("Building testset...")
     testset = trainset.build_testset()
     testpredictions = algo.test(testset)
+    print("Calculating testset accuracy...")
     accuRMSE = accuracy.rmse(testpredictions, verbose=True)
     # Than predict ratings for all pairs (u, i) that are NOT in the training set.
     # predictions = loaded_algo.test(trainset.build_anti_testset())
 
-    predictions = algo.test(trainset.build_anti_testset())
-    precisions, recalls = precision_recall_at_k(predictions, k=5, threshold=4)
-
-    # Precision and recall can then be averaged over all users
-    print(sum(prec for prec in precisions.values()) / len(precisions))
-    print(sum(rec for rec in recalls.values()) / len(recalls))
-    print("Precisions: ", precisions, " Recalls", recalls)
-
-    validationResult = {"Method": modelName,
-                        "RMSE": RSMEArray,
-                        "RMSEMean": np.mean(RMSE['test_rmse']),
-                        "RMSETestsetAccuracy": accuRMSE,
-                        "MAE": MAEArray,
-                        "MAEMean": np.mean(RMSE['test_mae']),
-                        "date": datetime.datetime.utcnow(),
-                        "sumOfPrecisions": sum(prec for prec in precisions.values()) / len(precisions),
-                        "sumOfRecalls": sum(rec for rec in recalls.values()) / len(recalls)
-                        }
-
-    pdmo.insert_mongo('movielens', 'regressionResult', validationResult)
-
-    top_n = get_top_n(predictions, n=10)
-    # Print the recommended items for each user
-    # for uid, user_ratings in top_n.items():
-    #     print(uid, [iid for (iid, _) in user_ratings])
-    return(top_n[int(UserId)])
+    return "Completed"

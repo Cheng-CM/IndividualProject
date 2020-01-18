@@ -1,13 +1,13 @@
- <template>
+ <template >
   <div id="app">
     <div class="container">
+      <div class="col ">
       <div class="row">
-        <ul>Experiment for movie recommendation system in item comparsion and scale rating</ul>
+        Experiment for movie recommendation system in item comparsion and scale rating
       </div>
       <div class="row">
-        <ul>
-          <b-button class="mb-4" variant="primary" to="rRating">Start</b-button>
-        </ul>
+         <b-btn variant="primary" @click="next">Start</b-btn>
+      </div>
       </div>
     </div>
   </div>
@@ -23,6 +23,9 @@ export default {
   },
   components: {},
   methods: {
+    next(){
+      this.$router.push("1");
+    },
     async loadId() {
       var userId = 1000;
       const res = await MovieAPI.getgtUserid();
@@ -35,7 +38,6 @@ export default {
           }
           this.$session.set("userId", userId);
         }
-        this.$session.set("ratecount", 0);
       }
     }
   },
@@ -45,13 +47,19 @@ export default {
 };
 </script>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped>
+h3 {
+  margin: 40px 0 0;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
 }
 </style>

@@ -21,7 +21,7 @@ class Ratings(Document):
 class scale_ratings(Document):
     userId = fields.IntField(required=True)
     movieId = fields.IntField(required=True)
-    rating = fields.IntField(required=True)
+    rating = fields.FloatField(required=True)
     timestamp = fields.IntField(required=True)
 
 class compare_ratings(Document):

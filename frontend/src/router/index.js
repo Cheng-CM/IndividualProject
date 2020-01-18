@@ -1,38 +1,43 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import scale from '@/components/scale'
-import compare from '@/components/compare'
-import main from '@/components/main'
-import result from '@/components/result'
-import end from '@/components/end'
+import scale from '@/pages/scale'
+import compare from '@/pages/compare'
+import main from '@/pages/main'
+import result from '@/pages/result'
+import end from '@/pages/end'
+import select from "@/pages/select";
+import regression from "@/pages/regression"
 Vue.use(VueRouter)
 
 export default new VueRouter({
   mode: 'history',
   routes: [{
+    name: "Main",
+    path: '/',
+    component: main
+  }, {
+    name: "Select",
+    path: '/1',
+    component: select
+  }, {
     name: "Scale",
-    path: '/rRating',
+    path: '/2',
     component: scale
   }, {
     name: "Comparsion",
-    path: '/cRating',
+    path: '/3',
     component: compare
-  },
-  {
-    name: "Main",
-    path: '/main',
-    component: main
-  }, 
-  {
+  }, {
     name: "Result",
-    path: '/result',
+    path: '/4',
     component: result
-  },
-  {
+  }, {
     name: "End",
-    path: '/end',
+    path: '/5',
     component: end
-  },
-
-  ]
+  }, {
+    name: "regression",
+    path: '/result',
+    component: regression
+  }]
 })
