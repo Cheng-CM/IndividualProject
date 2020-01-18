@@ -1,0 +1,14 @@
+#
+####### Indivdual-Project-requirements.txt #######
+#
+
+###### Requirements ######
+django
+mongoengine
+pandas
+surprise
+pymongo
+djangorestframework
+django-rest-framework-mongoengine
+django-cors-headers
+numpy
