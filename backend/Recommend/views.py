@@ -18,9 +18,8 @@ for self in Movies.objects:
 
 def getRandomId():
     count = Movies.objects.count()
-    return idList[randint(0, count)]
-
-
+    return idList[randint(0, count)] if count != 0 else None
+    
 class rMoviesViewSet(meviewsets.ModelViewSet):
     def get_queryset(self):
         return Movies.objects.filter(id=getRandomId())

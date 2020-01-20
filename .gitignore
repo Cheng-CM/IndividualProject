@@ -1,3 +1,11 @@
 *.pyc
 node_modules
 .vscode
+backend/Recommend/Recommend_Engine/data/ml-latest-small/links.csv
+backend/Recommend/Recommend_Engine/data/ml-latest-small/ml-latest-small_testset
+backend/Recommend/Recommend_Engine/data/ml-latest-small/movies.csv
+backend/Recommend/Recommend_Engine/data/ml-latest-small/ratings.csv
+backend/Recommend/Recommend_Engine/data/ml-latest-small/README.txt
+backend/Recommend/Recommend_Engine/data/ml-latest-small/tags.csv
+mongo-config.yml
+frontend-config.yml
