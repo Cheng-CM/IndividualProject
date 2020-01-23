@@ -3,8 +3,10 @@ import os
 import pandas as pd
 from surprise import SVD, Dataset, Reader, dump
 import pandasMongo as pdmo
+from backend.Recommend.yaml import callConfig
+
 # Model = pd.read_csv("./data/ml-latest-small/ratings.csv", low_memory=False)
-Model = pdmo.read_mongo('movielens', 'ratings')
+Model = pdmo.read_mongo(callConfig('db'), 'ratings')
 # reader used by surprise
 reader = Reader(rating_scale=(0.5, 5))
 

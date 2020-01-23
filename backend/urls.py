@@ -17,8 +17,9 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.urls import path
 from django.http import HttpResponse
-from .Recommend.Recommend_Engine import get_top_n, pandasMongo,movielens
+from .Recommend.Recommend_Engine import get_top_n, pandasMongo, movie
 import json
+from backend.Recommend.yaml import callConfig
 
 
 def getRRes(request):
@@ -37,7 +38,6 @@ def getRRes(request):
 
 
 def postResult(request):
-
     body_unicode = request.body.decode('utf-8')
     body = json.loads(body_unicode)
 
@@ -47,13 +47,13 @@ def postResult(request):
     result = {"Result": res,
               "Content": content['data']}
 
-    pandasMongo.insert_mongo('movielens', 'UserChoices', result)
+    pandasMongo.insert_mongo(callConfig('db'), 'UserChoices', result)
 
     return HttpResponse("Successful")
 
 
 def getAccuracy(request):
-    result = pandasMongo.read_mongo_as_JSON('movielens', 'regressionResult')
+    result = pandasMongo.read_mongo_as_JSON(callConfig('db'), 'regressionResult')
     return HttpResponse(result)
 
 
@@ -61,7 +61,7 @@ def getSearch(request):
     search_text = request.GET.get('name', '')
     search_text = '\"' + search_text + '\"'
     result = pandasMongo.search(
-        'movielens', 'movies', search_text)
+        callConfig('db'), 'movies', search_text)
     return HttpResponse(result)
 
 def getMovielensResult(request):
@@ -83,5 +83,4 @@ urlpatterns = [
     path('getAccuracy', getAccuracy),
     path('search/', getSearch),
     path("getMovielensResult/", getMovielensResult)
-
 ]

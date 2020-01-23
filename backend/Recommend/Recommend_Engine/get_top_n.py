@@ -3,9 +3,12 @@ from collections import defaultdict
 import pandas as pd
 from surprise import SVD, Dataset, Reader, dump, KNNBaseline, KNNBasic, SVDpp, accuracy
 from surprise.model_selection import cross_validate
+from backend.Recommend.yaml import callConfig
 import backend.Recommend.Recommend_Engine.pandasMongo as pdmo
 import datetime
 import numpy as np
+
+
 
 
 def get_top_n(predictions, n=10):
@@ -72,12 +75,12 @@ def precision_recall_at_k(predictions, k=10, threshold=3.5):
 def getRecommendResult(modelId, UserId, check):
 
     if modelId == 0:
-        Model = pdmo.read_mongo('movielens', 'scale_ratings')
+        Model = pdmo.read_mongo(callConfig('db'), 'scale_ratings')
     else:
-        Model = pdmo.read_mongo('movielens', 'compare_ratings')
+        Model = pdmo.read_mongo(callConfig('db'), 'compare_ratings')
     # Command this to load faster/ Way more accurate
     if check == 1:
-        movielensModel = pdmo.read_mongo('movielens', 'ratings')
+        movielensModel = pdmo.read_mongo(callConfig('db'), 'ratings')
         Model = Model.append(movielensModel)
 
     # reader used by surprise
@@ -133,7 +136,7 @@ def getRecommendResult(modelId, UserId, check):
                         "sumOfRecalls": sum(rec for rec in recalls.values()) / len(recalls)
                         }
 
-    pdmo.insert_mongo('movielens', 'regressionResult', validationResult)
+    pdmo.insert_mongo(callConfig('db'), 'regressionResult', validationResult)
 
     top_n = get_top_n(predictions, n=10)
     # Print the recommended items for each user
