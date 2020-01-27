@@ -2,6 +2,5 @@
 node_modules
 .vscode
 /__pycache__
-backend/Recommend/Recommend_Engine/*
 mongo-config.yml
 frontend-config.yml
