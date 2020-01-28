@@ -1,6 +1,6 @@
 .DS_Store
 dist
-
+config.json
 # local env files
 .env.local
 .env.*.local
