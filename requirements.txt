@@ -12,3 +12,4 @@ djangorestframework
 django-rest-framework-mongoengine
 django-cors-headers
 numpy
+PyYAML
